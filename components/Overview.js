@@ -1,9 +1,12 @@
-import React from 'react'
+import { Paper } from '@mantine/core';
+import React from 'react';
 
 function Overview() {
-  return (
-    <div>Overview</div>
-  )
+    return (
+        <Paper shadow="md" p="md" radius="lg" mt={20}>
+            Overview
+        </Paper>
+    );
 }
 
-export default Overview
+export default Overview;

@@ -1,9 +1,12 @@
-import React from 'react'
+import { Paper } from '@mantine/core';
+import React from 'react';
 
 function Preview() {
-  return (
-    <div>Preview</div>
-  )
+    return (
+        <Paper shadow="md" p="md" radius="lg" mt={20}>
+            Preview
+        </Paper>
+    );
 }
 
-export default Preview
+export default Preview;

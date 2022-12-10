@@ -1,8 +1,11 @@
+import { Paper } from '@mantine/core'
 import React from 'react'
 
 function Build() {
   return (
-    <div>Build</div>
+    <Paper shadow="md" p="md" radius='lg' mt={20}>
+        Build
+    </Paper>
   )
 }
 

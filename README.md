@@ -1,8 +1,14 @@
-# Mantine Next Template
+# Slow Reveal (Analysis) Generation Tool
 
-Get started with Mantine + Next with just a few button clicks.
-Click `Use this template` button at the header of repository or [follow this link](https://github.com/mantinedev/mantine-minimal-next-template/generate) and create new repository with `@mantine` packages. Note that you have to be logged in to GitHub to generate template.
+This tool is used to generate a "slow reveal" carousel for the analysis of charts and graphs. 
 
-## Minimal template
+## Installation
 
-This template includes minimal setup for server side rendering with Next.js, you can find a [fully featured template here](https://github.com/mantinedev/mantine-next-template).
+1. Clone the repository
+2. Run `npm install` or `yarn install` to install dependencies
+3. Use `npm run dev` or `yarn dev` to start the development server
+4. Run `npm run build` or `yarn build` to build the project
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

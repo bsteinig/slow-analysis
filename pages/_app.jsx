@@ -1,14 +1,13 @@
-import { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 
-export default function App(props: AppProps) {
+export default function App(props) {
   const { Component, pageProps } = props;
 
   return (
     <>
       <Head>
-        <title>Page title</title>
+        <title>Slow Analysis</title>
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta
           name="viewport"
@@ -21,7 +20,7 @@ export default function App(props: AppProps) {
         withNormalizeCSS
         theme={{
           /** Put your mantine theme override here */
-          colorScheme: "dark",
+          colorScheme: "light",
         }}
       >
         <Component {...pageProps} />

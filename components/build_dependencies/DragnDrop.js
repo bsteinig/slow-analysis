@@ -1,8 +1,13 @@
+import { Grid, Paper } from '@mantine/core'
 import React from 'react'
 
 function DragnDrop() {
   return (
-    <div>DragnDrop</div>
+    <Grid.Col span={12} >
+        <Paper withBorder radius="md">
+            <div>DragnDrop</div>
+        </Paper>
+    </Grid.Col>
   )
 }
 

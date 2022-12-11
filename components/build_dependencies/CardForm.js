@@ -1,8 +1,13 @@
+import { Grid, Paper } from '@mantine/core'
 import React from 'react'
 
 function CardForm() {
   return (
-    <div>CardForm</div>
+    <Grid.Col md={5} lg={4}>
+        <Paper radius="md" withBorder>
+            Hello Mate
+        </Paper>
+    </Grid.Col>
   )
 }
 

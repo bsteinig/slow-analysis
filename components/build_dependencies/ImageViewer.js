@@ -1,8 +1,13 @@
+import { Grid, Paper } from '@mantine/core'
 import React from 'react'
 
 function ImageViewer() {
   return (
-    <div>ImageViewer</div>
+    <Grid.Col md={7} lg={8}>
+        <Paper withBorder radius="md">
+            <div>ImageViewer</div>
+        </Paper>
+    </Grid.Col>
   )
 }
 

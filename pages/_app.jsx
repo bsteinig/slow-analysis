@@ -1,8 +1,12 @@
 import Head from 'next/head';
-import { MantineProvider } from '@mantine/core';
+import { ColorSchemeProvider, MantineProvider } from '@mantine/core';
+import { useState } from 'react';
 
 export default function App(props) {
     const { Component, pageProps } = props;
+
+    const [colorScheme, setColorScheme] = useState('light');
+    const toggleColorScheme = (value) => {setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark')); console.log(colorScheme);};
 
     return (
         <>
@@ -13,21 +17,22 @@ export default function App(props) {
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
             </Head>
-
+            <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
             <MantineProvider
                 withGlobalStyles
                 withNormalizeCSS
                 theme={{
                     /** Put your mantine theme override here */
-                    colorScheme: 'dark',
+                    colorScheme: colorScheme,
                     fontFamily: 'Open Sans',
                     headings: {
                         fontFamily: 'Manrope',
-                    }
+                    },
                 }}
             >
                 <Component {...pageProps} />
             </MantineProvider>
+            </ColorSchemeProvider>
         </>
     );
 }

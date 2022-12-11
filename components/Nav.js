@@ -1,5 +1,16 @@
-import { Button, createStyles, Group, MediaQuery, Navbar, Text, useMantineTheme } from '@mantine/core';
-import { IconChartAreaLine, IconCrane, IconSchool } from '@tabler/icons';
+import {
+    ActionIcon,
+    Button,
+    Center,
+    createStyles,
+    Group,
+    MediaQuery,
+    Navbar,
+    Text,
+    useMantineColorScheme,
+    useMantineTheme,
+} from '@mantine/core';
+import { IconChartAreaLine, IconCrane, IconMoonStars, IconSchool, IconSun } from '@tabler/icons';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({
@@ -16,7 +27,6 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
         borderRadius: theme.radius.lg,
         boxShadow: theme.shadows.md,
-        backdropFilter: 'blur(20px)',
 
         transition: 'all 0.2s ease',
     },
@@ -36,6 +46,7 @@ const useStyles = createStyles((theme) => ({
 
 function Nav({ setActive }) {
     const { classes } = useStyles();
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
     const theme = useMantineTheme();
 
@@ -62,9 +73,6 @@ function Nav({ setActive }) {
                     {item.label}
                 </Text>
             </MediaQuery>
-            
-                
-
         </Button>
     ));
 
@@ -84,6 +92,19 @@ function Nav({ setActive }) {
             <Group noWrap className={classes.linkGroup}>
                 {links}
             </Group>
+            <Center style={{ display: 'flex', flexDirection: 'column', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                <ActionIcon
+                    onClick={() => toggleColorScheme()}
+                    size="lg"
+                    radius="md"
+                    sx={(theme) => ({
+                        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
+                        color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
+                    })}
+                >
+                    {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+                </ActionIcon>
+            </Center>
         </Navbar>
     );
 }

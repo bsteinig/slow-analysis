@@ -5,9 +5,6 @@ import { IconPhoto, IconTrashX, IconUpload, IconX } from '@tabler/icons';
 import React, { useState, useEffect } from 'react';
 
 const useStyles = createStyles((theme) => ({
-    title: {
-        color: theme.colorScheme === 'dark' ? theme.colors.teal[4] : theme.colors.teal[8],
-    },
     form: {
         maxWidth: 450,
     },

@@ -7,7 +7,7 @@ import Preview from "../components/Preview";
 
 const useStyles = createStyles((theme) => ({
   root: {
-    backgroundColor: theme.colors.gray[3],
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[9] :  theme.colors.gray[2],
     minHeight: '100vh',
   },
   main: {
@@ -27,7 +27,7 @@ export default function IndexPage() {
       case 'overview':
         return <Overview />;
       case 'build':
-        return <Build />;
+        return <Build setActive={setActive} />;
       case 'preview':
         return <Preview />;
       default:

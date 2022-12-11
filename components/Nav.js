@@ -1,4 +1,5 @@
-import { Button, createStyles, Group, Navbar, Text, useMantineTheme } from '@mantine/core';
+import { Button, createStyles, Group, MediaQuery, Navbar, Text, useMantineTheme } from '@mantine/core';
+import { IconChartAreaLine, IconCrane, IconSchool } from '@tabler/icons';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({
@@ -12,10 +13,7 @@ const useStyles = createStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
 
-        backgroundColor:
-            theme.colorScheme === 'dark'
-                ? theme.colors.dark[9]
-                : theme.colors.gray[0],
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
         borderRadius: theme.radius.lg,
         boxShadow: theme.shadows.md,
         backdropFilter: 'blur(20px)',
@@ -28,6 +26,11 @@ const useStyles = createStyles((theme) => ({
     linkGroup: {
         width: '100%',
         maxWidth: 600,
+
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
     },
 }));
 
@@ -37,9 +40,9 @@ function Nav({ setActive }) {
     const theme = useMantineTheme();
 
     const data = [
-        { label: 'Overview', value: 'overview', color: 'grape.7' },
-        { label: 'Build', value: 'build', color: 'teal.7' },
-        { label: 'Preview', value: 'preview', color: 'orange.7' },
+        { label: 'Overview', value: 'overview', color: 'grape.7', icon: IconSchool },
+        { label: 'Build', value: 'build', color: 'teal.7', icon: IconCrane },
+        { label: 'Preview', value: 'preview', color: 'orange.7', icon: IconChartAreaLine },
     ];
 
     const links = data.map((item) => (
@@ -53,9 +56,15 @@ function Nav({ setActive }) {
             key={item.label}
             onClick={() => setActive(item.value)}
         >
-            <Text weight={600} size="md">
-                {item.label}
-            </Text>
+            <item.icon size={24} color={theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[9]} />
+            <MediaQuery query="(max-width: 350px)">
+                <Text weight={600} size="md" ml={7}>
+                    {item.label}
+                </Text>
+            </MediaQuery>
+            
+                
+
         </Button>
     ));
 
@@ -63,16 +72,16 @@ function Nav({ setActive }) {
         <Navbar
             height={70}
             fixed={true}
-            p={'sm'}
-            width={{ base: '90vw', xs: '80vw', sm: '70vw',  md: '60vw', lg: '50vw' }}
+            p="sm"
+            width={{ base: '90vw', xs: '80vw', sm: '70vw', md: '60vw', lg: '50vw' }}
             className={classes.root}
             sx={(theme) => ({
-                borderColor: theme.colors.gray[0],
+                borderColor: theme.colors.gray[4],
                 borderWidth: '2px !important',
                 borderStyle: 'solid !important',
             })}
         >
-            <Group position="apart" noWrap className={classes.linkGroup}>
+            <Group noWrap className={classes.linkGroup}>
                 {links}
             </Group>
         </Navbar>

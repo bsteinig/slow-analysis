@@ -18,6 +18,7 @@ const useStyles = createStyles((theme) => ({
         top: 30,
         left: '50%',
         transform: 'translate(-50%, 0)',
+        zIndex: 2,
 
         display: 'flex',
         flexDirection: 'row',
@@ -68,7 +69,7 @@ function Nav({ setActive }) {
             onClick={() => setActive(item.value)}
         >
             <item.icon size={24} color={theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[9]} />
-            <MediaQuery query="(max-width: 350px)">
+            <MediaQuery smallerThan="xs" styles={{ display: 'none'}} >
                 <Text weight={600} size="md" ml={7}>
                     {item.label}
                 </Text>
@@ -84,7 +85,7 @@ function Nav({ setActive }) {
             width={{ base: '90vw', xs: '80vw', sm: '70vw', md: '60vw', lg: '50vw' }}
             className={classes.root}
             sx={(theme) => ({
-                borderColor: theme.colors.gray[4],
+                borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[2],
                 borderWidth: '2px !important',
                 borderStyle: 'solid !important',
             })}
@@ -96,7 +97,7 @@ function Nav({ setActive }) {
                 <ActionIcon
                     onClick={() => toggleColorScheme()}
                     size="lg"
-                    radius="md"
+                    radius="xl"
                     sx={(theme) => ({
                         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
                         color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],

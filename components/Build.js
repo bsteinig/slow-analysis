@@ -13,7 +13,7 @@ import {
     Tooltip,
 } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
-import { IconAdjustments, IconRefresh, IconSettings, IconTrash } from '@tabler/icons';
+import { IconAdjustments, IconRefresh, IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
 import React, { useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
 import DragnDrop from './build_dependencies/DragnDrop';
@@ -40,7 +40,7 @@ function Build({ setComponent }) {
     const [imageURL, setImageURL] = useLocalStorage({ key: 'image-url', defaultValue: '' });
 
     // Selection state
-    const [selection, setSelection] = useState({ active: true, x: 0, y: 0, width: 0, height: 0 });
+    const [selection, setSelection] = useState({ active: false, x: 0, y: 0, width: 0, height: 0 });
 
     // Slides state
     const [slides, setSlides] = useState([]);
@@ -86,30 +86,35 @@ function Build({ setComponent }) {
                         </Text>
                     </Stack>
                     {submitted && (
-                        <Group p="md">
-                            <Tooltip label="Settings">
-                                <ActionIcon size="lg" radius="md" variant="filled" label="Settings">
-                                    <IconSettings size={25} />
-                                </ActionIcon>
-                            </Tooltip>
-                            <Tooltip label="Restart">
-                                <ActionIcon size="lg" radius="md" color="yellow" variant="filled" label="Restart">
-                                    <IconRefresh size={25} />
-                                </ActionIcon>
-                            </Tooltip>
-                            <Tooltip label="Trash and Reset">
-                                <ActionIcon
-                                    size="lg"
-                                    radius="md"
-                                    color="red"
-                                    variant="filled"
-                                    label="Trash & Reset"
-                                    onClick={() => setTrashOpened(true)}
-                                >
-                                    <IconTrash size={25} />
-                                </ActionIcon>
-                            </Tooltip>
-                        </Group>
+                        <Stack align="flex-start" justify="flex-start" spacing={3} pr="lg">
+                            <Text size="sm" color="dimmed">
+                                Project Actions:
+                            </Text>
+                            <Group position='left'>
+                                <Tooltip label="Project Settings">
+                                    <ActionIcon size="lg" radius="md" variant="filled" label="Project Settings">
+                                        <IconSettings size={25} />
+                                    </ActionIcon>
+                                </Tooltip>
+                                <Tooltip label="Restart Project">
+                                    <ActionIcon size="lg" radius="md" color="yellow" variant="filled" label="Restart Project">
+                                        <IconRefreshAlert size={25} />
+                                    </ActionIcon>
+                                </Tooltip>
+                                <Tooltip label="Trash Project">
+                                    <ActionIcon
+                                        size="lg"
+                                        radius="md"
+                                        color="red"
+                                        variant="filled"
+                                        label="Trash Projec"
+                                        onClick={() => setTrashOpened(true)}
+                                    >
+                                        <IconTrash size={25} />
+                                    </ActionIcon>
+                                </Tooltip>
+                            </Group>
+                        </Stack>
                     )}
                 </Group>
                 {submitted ? (

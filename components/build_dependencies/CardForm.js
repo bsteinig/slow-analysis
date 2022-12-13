@@ -73,7 +73,7 @@ function CardForm({ selection, setSlides }) {
                     overlayOpacity={0.25}
                     overlayColor="#000"
                     overlayBlur={4}
-                    transitionDuration={300}
+                    transitionDuration={100}
                     loader={customLoader}
                     radius="md"
                 />

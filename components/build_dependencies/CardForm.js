@@ -120,7 +120,7 @@ function CardForm({ selection, setSlides }) {
                             size="md"
                             className={classes.submit}
                         >
-                            Submit
+                            Save
                         </Button>
                     </Stack>
                 </form>

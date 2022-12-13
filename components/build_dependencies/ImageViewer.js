@@ -48,7 +48,7 @@ function ImageViewer({ imageURL, selection, setSelection }) {
             <Paper withBorder radius="md" p="md" className={classes.root}>
                 <BackgroundImage src={imageURL} radius="sm" className={classes.bgImage}>
                     <Box
-                        sx={(theme) => ({ height: 400, position: 'relative', backgroundColor: theme.fn.rgba(theme.colors.gray[9],0.5)  })}
+                        sx={(theme) => ({ height: 400, position: 'relative', backgroundColor: theme.fn.rgba(theme.colors.gray[9],0.75)  })}
                         mx="auto"
                         ref={mergedRef}
                         onMouseDown={() =>
@@ -61,24 +61,24 @@ function ImageViewer({ imageURL, selection, setSelection }) {
                         <div
                             style={{
                                 position: 'absolute',
-                                left: `${value.x < startValue.x ? `unset` : `calc(${startValue.x * 100}% - 8px)`}`,
-                                right: `${value.x < startValue.x ? `calc(${(1 - startValue.x) * 100 }% - 8px)` : `unset`}`,
-                                top: `${value.y < startValue.y ? `unset` : `calc(${startValue.y * 100}% - 8px)`}`,
-                                bottom: `${value.y < startValue.y ? `calc(${(1 - startValue.y) * 100}% - 8px)` : `unset`}`,
+                                left: `${value.x < startValue.x ? `unset` : `calc(${startValue.x * 100}% )`}`,
+                                right: `${value.x < startValue.x ? `calc(${(1 - startValue.x) * 100 }% )` : `unset`}`,
+                                top: `${value.y < startValue.y ? `unset` : `calc(${startValue.y * 100}% )`}`,
+                                bottom: `${value.y < startValue.y ? `calc(${(1 - startValue.y) * 100}% )` : `unset`}`,
                                 width: `${
                                     value.x < startValue.x
-                                        ? `calc(${(startValue.x - value.x) * 100}% + 16px)`
-                                        : `calc(${(value.x - startValue.x) * 100}% + 16px)`
+                                        ? `calc(${(startValue.x - value.x) * 100}% )`
+                                        : `calc(${(value.x - startValue.x) * 100}% )`
                                 }`,
                                 height: `${
                                     value.y < startValue.y
-                                        ? `calc(${(startValue.y - value.y) * 100}% + 16px)`
-                                        : `calc(${(value.y - startValue.y) * 100}% + 16px)`
+                                        ? `calc(${(startValue.y - value.y) * 100}% )`
+                                        : `calc(${(value.y - startValue.y) * 100}% )`
                                 }`,
                                 backgroundColor: active
                                     ? theme.fn.rgba(theme.colors.gray[7], 0.5)
                                     : theme.fn.rgba(theme.colors.gray[7], 0.5),
-                                backdropFilter: 'ligten(1)',
+                                backdropFilter: 'brightness(3) saturate(2.5)',
                             }}
                         />
                     </Box>

@@ -13,8 +13,8 @@ import {
     Tooltip,
 } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
-import { IconAdjustments, IconRefresh, IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
-import React, { useState } from 'react';
+import { IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
+import React, { useEffect, useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
 import DragnDrop from './build_dependencies/DragnDrop';
 import Form from './build_dependencies/Form';
@@ -35,7 +35,7 @@ const useStyles = createStyles((theme) => ({
 function Build({ setComponent }) {
     const { classes } = useStyles();
 
-    // Form state
+    // Image state
     const [submitted, setSubmitted] = useLocalStorage({ key: 'image-submitted', defaultValue: false });
     const [imageURL, setImageURL] = useLocalStorage({ key: 'image-url', defaultValue: '' });
 
@@ -45,11 +45,16 @@ function Build({ setComponent }) {
     // Slides state
     const [slides, setSlides] = useState([]);
 
+    // Form state
+    const [formSubmission, setFormSubmission] = useState({});
+    const [selectionReset, setSelectionReset] = useState(false);
+
     // Modals State
     const [restartOpened, setRestartOpened] = useState(false);
     const [settingsOpened, setSettingsOpened] = useState(false);
     const [trashOpened, setTrashOpened] = useState(false);
 
+    // Modal handlers
     const handleProjectDelete = () => {
         setSubmitted(false);
         setImageURL('');
@@ -57,6 +62,23 @@ function Build({ setComponent }) {
         setSlides([]);
         setTrashOpened(false);
     };
+
+    // Form handlers
+    useEffect(() => {
+        console.log('formSubmission', formSubmission);
+        if (selection.active && Object.keys(formSubmission).length > 0) {
+            // We have received a form submission and a selection is active
+            // We need to create a new slide
+            const newSlide = {
+                id: slides.length,
+                selection: selection,
+                data: formSubmission,
+            };
+            setSlides([...slides, newSlide]);
+            setSelectionReset(true);
+            setFormSubmission({});
+        }
+    }, [formSubmission]);
 
     return (
         <>
@@ -90,14 +112,20 @@ function Build({ setComponent }) {
                             <Text size="sm" color="dimmed">
                                 Project Actions:
                             </Text>
-                            <Group position='left'>
+                            <Group position="left">
                                 <Tooltip label="Project Settings">
                                     <ActionIcon size="lg" radius="md" variant="filled" label="Project Settings">
                                         <IconSettings size={25} />
                                     </ActionIcon>
                                 </Tooltip>
                                 <Tooltip label="Restart Project">
-                                    <ActionIcon size="lg" radius="md" color="yellow" variant="filled" label="Restart Project">
+                                    <ActionIcon
+                                        size="lg"
+                                        radius="md"
+                                        color="yellow"
+                                        variant="filled"
+                                        label="Restart Project"
+                                    >
                                         <IconRefreshAlert size={25} />
                                     </ActionIcon>
                                 </Tooltip>
@@ -119,8 +147,8 @@ function Build({ setComponent }) {
                 </Group>
                 {submitted ? (
                     <Grid grow gutter="xs">
-                        <ImageViewer selection={selection} setSelection={setSelection} imageURL={imageURL} />
-                        <CardForm selection={selection} setSlides={setSlides} />
+                        <ImageViewer selection={selection} setSelection={setSelection} imageURL={imageURL} selectionReset={selectionReset} setSelectionReset={setSelectionReset} />
+                        <CardForm selection={selection} setSlides={setSlides} setFormSubmission={setFormSubmission} />
                         <DragnDrop slides={slides} />
                     </Grid>
                 ) : (

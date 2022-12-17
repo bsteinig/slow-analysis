@@ -47,7 +47,7 @@ const useStyles = createStyles((theme) => ({
     selection: active: boolean, x: number, y: number, width: number, height: number
     setSelection: function
 */
-function ImageViewer({ imageURL, selection, setSelection }) {
+function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSelectionReset }) {
     const { classes, theme } = useStyles();
 
     // Selection state
@@ -85,7 +85,18 @@ function ImageViewer({ imageURL, selection, setSelection }) {
         setSelection({ startX: 0, startY: 0, endX: 0, endY: 0, active: false });
         setStartValue({ x: 0, y: 0 });
         setValue({ x: 0, y: 0 });
+        if (locked) {
+            toggleLock();
+        }
     };
+
+    useEffect(() => {
+        if (selectionReset) {
+            resetSelection();
+            setSelectionReset(false);
+        }
+    }, [selectionReset]);
+
 
     return (
         <Grid.Col md={7} lg={8}>

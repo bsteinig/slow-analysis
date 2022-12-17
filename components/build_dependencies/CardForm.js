@@ -39,7 +39,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function CardForm({ selection, setSlides }) {
+function CardForm({ selection, setFormSubmission }) {
     const { classes } = useStyles();
 
     const customLoader = (
@@ -65,6 +65,15 @@ function CardForm({ selection, setSlides }) {
         },
     });
 
+    const handleFormSubmit = (values) => {
+        if(selection.active){
+            setFormSubmission(values)
+            componentForm.reset();
+        }else{
+            alert('Save Failed. Please make a selection on the image to the left.')
+        }
+    };
+
     return (
         <Grid.Col md={5} lg={4}>
             <Paper radius="md" shadow="xs" p="md" className={classes.root}>
@@ -86,7 +95,7 @@ function CardForm({ selection, setSlides }) {
                     </Text>
                 </Stack>
 
-                <form onSubmit={componentForm.onSubmit((values) => console.log(values))}>
+                <form onSubmit={componentForm.onSubmit((values) => handleFormSubmit(values))}>
                     <Stack px="sm">
                         <TextInput
                             label="Graphical Feature"

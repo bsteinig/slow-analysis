@@ -40,7 +40,7 @@ function Build({ setComponent }) {
     const [imageURL, setImageURL] = useLocalStorage({ key: 'image-url', defaultValue: '' });
 
     // Selection state
-    const [selection, setSelection] = useState({ active: false, x: 0, y: 0, width: 0, height: 0 });
+    const [selection, setSelection] = useState({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
 
     // Slides state
     const [slides, setSlides] = useState([]);
@@ -53,7 +53,7 @@ function Build({ setComponent }) {
     const handleProjectDelete = () => {
         setSubmitted(false);
         setImageURL('');
-        setSelection({ active: true, x: 0, y: 0, width: 0, height: 0 });
+        setSelection({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
         setSlides([]);
         setTrashOpened(false);
     };

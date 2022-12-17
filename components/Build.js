@@ -43,7 +43,7 @@ function Build({ setComponent }) {
     const [selection, setSelection] = useState({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
 
     // Slides state
-    const [storeSlides, setStoreSlides] = useLocalStorage({ key: 'slides', defaultValue: [] });
+    const [storeSlides, setStoreSlides] = useSessionStorage({ key: 'slides', defaultValue: [] });
     const [slides, handlers] = useListState([]);
 
     // Form state
@@ -61,6 +61,7 @@ function Build({ setComponent }) {
         setImageURL('');
         setSelection({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
         handlers.setState([]);
+        setStoreSlides([]);
         setTrashOpened(false);
     };
 
@@ -83,13 +84,18 @@ function Build({ setComponent }) {
 
     // Storage handlers
     useEffect(() => {
+        if(slides.length === 0) return;
+        console.log('storing slides', slides);
         setStoreSlides(slides);
     }, [slides]);
 
     // Only retrieve slides from storage on load
     useEffect(() => {
-        handlers.setState(storeSlides);
-    }, []);
+        if(storeSlides != slides){
+            console.log('retrieving slides from storage', storeSlides)
+            handlers.setState(storeSlides);
+        }
+    }, [storeSlides]);
 
     return (
         <>

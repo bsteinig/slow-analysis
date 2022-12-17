@@ -10,6 +10,10 @@ const useStyles = createStyles((theme) => ({
         height: 200,
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
         margin: theme.spacing.md,
+        boxShadow: theme.shadows.sm,
+    },
+    dragging: {
+      boxShadow: theme.shadows.lg,
     },
     dragHandle: {
         ...theme.fn.focusStyles(),
@@ -33,8 +37,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function DragnDrop({ slides, handlers }) {
-    const { classes } = useStyles();
-    console.log(slides);
+    const { classes, cx } = useStyles();
 
     const items = slides.map((slide, index) => (
         <Draggable key={index} draggableId={index.toString()} index={index}>
@@ -42,10 +45,9 @@ function DragnDrop({ slides, handlers }) {
                 <Paper
                     key={index}
                     radius="md"
-                    shadow={snapshot.isDragging ? 'lg' : 'sm'}
                     p="sm"
                     withBorder
-                    className={classes.card}
+                    className={cx(classes.card, { [classes.dragging]: snapshot.isDragging })}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                 >
@@ -70,7 +72,7 @@ function DragnDrop({ slides, handlers }) {
                                 </ActionIcon>
                             </Tooltip>
                             <Tooltip label="Delete Slide">
-                                <ActionIcon size="lg" radius="md" variant="filled" color="red" label="Delete Slide">
+                                <ActionIcon size="lg" radius="md" variant="filled" color="red" label="Delete Slide" onClick={() => handlers.remove(index)}>
                                     <IconTrashX size={25} />
                                 </ActionIcon>
                             </Tooltip>

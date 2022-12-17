@@ -97,7 +97,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         }
     }, [selectionReset]);
 
-
     return (
         <Grid.Col md={7} lg={8}>
             <Paper withBorder radius="md" p="md" className={classes.root}>
@@ -207,22 +206,26 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                             </Tooltip>
                         </Group>
                         <Group>
-                            <Badge color="green" radius="md">{view ? 'Full Image' : 'Selection View'}</Badge>
-                            <Badge color="orange" radius="md">{locked ? 'Selection Locked' : 'Selection Unlocked'}</Badge>
+                            <Badge color="green" radius="md">
+                                {view ? 'Full Image' : 'Selection View'}
+                            </Badge>
+                            <Badge color="orange" radius="md">
+                                {locked ? 'Selection Locked' : 'Selection Unlocked'}
+                            </Badge>
                         </Group>
                     </Group>
                 </Stack>
                 <Collapse in={collapsed}>
-                    <Text>
+                    <Text mt={5}>
                         Start Value{' '}
                         <Code>{`{ x: ${Math.round(selection.startX * 100)}, y: ${Math.round(
                             selection.startY * 100,
                         )} }`}</Code>
-                        End Value{' '}
+                        , End Value{' '}
                         <Code>{`{ x: ${Math.round(selection.endY * 100)}, y: ${Math.round(
                             selection.endY * 100,
                         )} }`}</Code>
-                        Selection<Code>{`active: ${selection.active} `}</Code>
+                        , Selection <Code>{`active: ${selection.active} `}</Code>
                     </Text>
                 </Collapse>
             </Paper>

@@ -12,7 +12,7 @@ import {
     Title,
     Tooltip,
 } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
+import { useListState, useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import { IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
@@ -36,14 +36,15 @@ function Build({ setComponent }) {
     const { classes } = useStyles();
 
     // Image state
-    const [submitted, setSubmitted] = useLocalStorage({ key: 'image-submitted', defaultValue: false });
-    const [imageURL, setImageURL] = useLocalStorage({ key: 'image-url', defaultValue: '' });
+    const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });
+    const [imageURL, setImageURL] = useSessionStorage({ key: 'image-url', defaultValue: '' });
 
     // Selection state
     const [selection, setSelection] = useState({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
 
     // Slides state
-    const [slides, setSlides] = useState([]);
+    const [storeSlides, setStoreSlides] = useLocalStorage({ key: 'slides', defaultValue: [] });
+    const [slides, handlers] = useListState([]);
 
     // Form state
     const [formSubmission, setFormSubmission] = useState({});
@@ -59,7 +60,7 @@ function Build({ setComponent }) {
         setSubmitted(false);
         setImageURL('');
         setSelection({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
-        setSlides([]);
+        handlers.setState([]);
         setTrashOpened(false);
     };
 
@@ -74,11 +75,21 @@ function Build({ setComponent }) {
                 selection: selection,
                 data: formSubmission,
             };
-            setSlides([...slides, newSlide]);
+            handlers.append(newSlide);
             setSelectionReset(true);
             setFormSubmission({});
         }
     }, [formSubmission]);
+
+    // Storage handlers
+    useEffect(() => {
+        setStoreSlides(slides);
+    }, [slides]);
+
+    // Only retrieve slides from storage on load
+    useEffect(() => {
+        handlers.setState(storeSlides);
+    }, []);
 
     return (
         <>
@@ -148,8 +159,8 @@ function Build({ setComponent }) {
                 {submitted ? (
                     <Grid grow gutter="xs">
                         <ImageViewer selection={selection} setSelection={setSelection} imageURL={imageURL} selectionReset={selectionReset} setSelectionReset={setSelectionReset} />
-                        <CardForm selection={selection} setSlides={setSlides} setFormSubmission={setFormSubmission} />
-                        <DragnDrop slides={slides} />
+                        <CardForm selection={selection} setFormSubmission={setFormSubmission} />
+                        <DragnDrop slides={slides} handlers={handlers} />
                     </Grid>
                 ) : (
                     <Form setImageURL={setImageURL} setSubmitted={setSubmitted} />

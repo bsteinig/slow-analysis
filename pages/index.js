@@ -21,12 +21,7 @@ export default function IndexPage() {
     const [component, setComponent] = useState('build');
 
     // Project state
-    const [project, setProject] = useState({}); // image: url, title: string, slides: [{}, {}, {}]
-
-    useEffect(() => {
-        console.log('project', project);
-    }, [project])
-    
+    const [project, setProject] = useState({}); // image: url, title: string, slides: [{}, {}, {}]    
 
     // conditionally render the component based on the active state (overview, build, preview)
     const renderComponent = () => {
@@ -36,7 +31,7 @@ export default function IndexPage() {
             case 'build':
                 return <Build setComponent={setComponent} setProject={setProject} />;
             case 'preview':
-                return <Preview project={project} />;
+                return <Preview setComponent={setComponent} project={project} />;
             default:
                 return <Build setComponent={setComponent} setProject={setProject} />;
         }

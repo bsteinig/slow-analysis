@@ -27,9 +27,6 @@ const useStyles = createStyles((theme) => ({
         borderWidth: '2px !important',
         borderStyle: 'solid !important',
     },
-    title: {
-        color: theme.colorScheme === 'dark' ? theme.colors.teal[4] : theme.colors.teal[8],
-    },
 }));
 
 function Build({ setComponent, setProject }) {
@@ -89,14 +86,14 @@ function Build({ setComponent, setProject }) {
     // Storage handlers
     useEffect(() => {
         if (slides.length === 0) return;
-        console.log('storing slides', slides);
+        //console.log('storing slides', slides);
         setStoreSlides(slides);
     }, [slides]);
 
         // Only retrieve slides from storage on load
         useEffect(() => {
             if (storeSlides != slides) {
-                console.log('retrieving slides from storage', storeSlides);
+                //console.log('retrieving slides from storage', storeSlides);
                 handlers.setState(storeSlides);
             }
         }, [storeSlides]);

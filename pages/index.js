@@ -1,5 +1,5 @@
 import { Container, createStyles } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Build from '../components/Build';
 import Nav from '../components/Nav';
 import Overview from '../components/Overview';
@@ -20,17 +20,25 @@ export default function IndexPage() {
     const { classes } = useStyles();
     const [component, setComponent] = useState('build');
 
+    // Project state
+    const [project, setProject] = useState({}); // image: url, title: string, slides: [{}, {}, {}]
+
+    useEffect(() => {
+        console.log('project', project);
+    }, [project])
+    
+
     // conditionally render the component based on the active state (overview, build, preview)
     const renderComponent = () => {
         switch (component) {
             case 'overview':
                 return <Overview />;
             case 'build':
-                return <Build setComponent={setComponent} />;
+                return <Build setComponent={setComponent} setProject={setProject} />;
             case 'preview':
-                return <Preview />;
+                return <Preview project={project} />;
             default:
-                return <Build />;
+                return <Build setComponent={setComponent} setProject={setProject} />;
         }
     };
 

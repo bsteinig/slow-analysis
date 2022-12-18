@@ -32,8 +32,10 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function Build({ setComponent }) {
+function Build({ setComponent, setProject }) {
     const { classes } = useStyles();
+
+    // FIXME: This would be a lot better if the state was managed in a single place, but the data is usually small so it's not a big deal
 
     // Image state
     const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });
@@ -91,13 +93,23 @@ function Build({ setComponent }) {
         setStoreSlides(slides);
     }, [slides]);
 
-    // Only retrieve slides from storage on load
+        // Only retrieve slides from storage on load
+        useEffect(() => {
+            if (storeSlides != slides) {
+                console.log('retrieving slides from storage', storeSlides);
+                handlers.setState(storeSlides);
+            }
+        }, [storeSlides]);
+
+    // Project handler
     useEffect(() => {
-        if (storeSlides != slides) {
-            console.log('retrieving slides from storage', storeSlides);
-            handlers.setState(storeSlides);
-        }
-    }, [storeSlides]);
+        setProject({
+            image: imageURL,
+            title: title,
+            slides: slides,
+        });
+    }, [imageURL, title, slides]);
+
 
     return (
         <>

@@ -72,8 +72,8 @@ function Form({ setImageURL, setSubmitted, setTitle }) {
     };
 
     const handleUploadSubmission = () => {
-        console.log('submitting', upload.values)
-        setTitle(upload.values.title)
+        console.log('submitting', upload.values);
+        setTitle(upload.values.title);
         if (upload.values.link) {
             console.log(upload.values.link);
             setSubmitted(true);
@@ -111,8 +111,8 @@ function Form({ setImageURL, setSubmitted, setTitle }) {
 
     return (
         <Center>
-            <Stepper active={active} breakpoint="sm">
-                <Stepper.Step label="Add image" description="Provide link to image, or upload an image.">
+            <Stepper active={active} breakpoint="sm" mt={20} style={{ minWidth: '75%'}}>
+                <Stepper.Step label="Add image" description="Provide link to image, or upload an image." mx={10}>
                     <Center>
                         <Stack>
                             <Group>
@@ -213,7 +213,7 @@ function Form({ setImageURL, setSubmitted, setTitle }) {
                         </Stack>
                     </Center>
                 </Stepper.Step>
-                <Stepper.Step label="Add title" description="Create a title for your project">
+                <Stepper.Step label="Add title" description="Create a title for your project" mx={10}>
                     <Center>
                         <Stack>
                             <TextInput

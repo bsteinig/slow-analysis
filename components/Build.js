@@ -60,6 +60,7 @@ function Build({ setComponent }) {
     const handleProjectDelete = () => {
         setSubmitted(false);
         setImageURL('');
+        setTitle('');
         setSelection({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
         handlers.setState([]);
         setStoreSlides([]);
@@ -100,7 +101,7 @@ function Build({ setComponent }) {
 
     return (
         <>
-            <Modal opened={trashOpened} onClose={() => setTrashOpened(false)} title="Warning! Deleting Project">
+            <Modal opened={trashOpened} onClose={() => setTrashOpened(false)} title="Warning! Deleting Project" zIndex={1000}>
                 <Text size="sm" color="dimmed">
                     By continuing you will be deleting the current project. This action cannot be undone.
                 </Text>
@@ -113,7 +114,7 @@ function Build({ setComponent }) {
                     </Button>
                 </Group>
             </Modal>
-            <Paper shadow="md" p="lg" radius="lg" mt={20} className={classes.root}>
+            <Paper shadow="md" p="lg" radius="lg" my={20} className={classes.root}>
                 <Stack spacing={0}>
                     <Stack align="flex-start" justify="flex-start" spacing={0} pl={20}>
                         <Title className={classes.title}>Build</Title>

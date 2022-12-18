@@ -17,7 +17,7 @@ import React from 'react';
 
 const useStyles = createStyles((theme) => ({
     root: {
-        minHeight: 400,
+        minHeight: 505,
         borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
         borderStyle: 'solid',
         borderWidth: 1,
@@ -56,12 +56,10 @@ function CardForm({ selection, setFormSubmission }) {
     const componentForm = useForm({
         initialValues: {
             graphicalFeature: '',
-            title: '',
             description: '',
         },
         validate: {
             graphicalFeature: (value) => (value.length > 0 ? null : 'Graphical feature is required'),
-            title: (value) => (value.trim().length > 0 ? null : 'Title is required'),
         },
     });
 
@@ -104,13 +102,6 @@ function CardForm({ selection, setFormSubmission }) {
                             size="md"
                             withAsterisk
                             {...componentForm.getInputProps('graphicalFeature')}
-                        />
-                        <TextInput
-                            label="Title"
-                            radius="md"
-                            size="md"
-                            withAsterisk
-                            {...componentForm.getInputProps('title')}
                         />
                         <Textarea
                             label="Description"

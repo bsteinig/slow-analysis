@@ -12,6 +12,7 @@ const useStyles = createStyles((theme) => ({
     },
     main: {
         paddingTop: 120,
+        paddingBottom: 120,
     },
 }));
 

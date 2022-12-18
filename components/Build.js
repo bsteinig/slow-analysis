@@ -38,6 +38,7 @@ function Build({ setComponent }) {
     // Image state
     const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });
     const [imageURL, setImageURL] = useSessionStorage({ key: 'image-url', defaultValue: '' });
+    const [title, setTitle] = useSessionStorage({ key: 'image-title', defaultValue: '' });
 
     // Selection state
     const [selection, setSelection] = useState({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
@@ -84,15 +85,15 @@ function Build({ setComponent }) {
 
     // Storage handlers
     useEffect(() => {
-        if(slides.length === 0) return;
+        if (slides.length === 0) return;
         console.log('storing slides', slides);
         setStoreSlides(slides);
     }, [slides]);
 
     // Only retrieve slides from storage on load
     useEffect(() => {
-        if(storeSlides != slides){
-            console.log('retrieving slides from storage', storeSlides)
+        if (storeSlides != slides) {
+            console.log('retrieving slides from storage', storeSlides);
             handlers.setState(storeSlides);
         }
     }, [storeSlides]);
@@ -113,8 +114,8 @@ function Build({ setComponent }) {
                 </Group>
             </Modal>
             <Paper shadow="md" p="lg" radius="lg" mt={20} className={classes.root}>
-                <Group position="apart">
-                    <Stack align="flex-start" justify="flex-start" spacing={0} mb={30} pl={20}>
+                <Stack spacing={0}>
+                    <Stack align="flex-start" justify="flex-start" spacing={0} pl={20}>
                         <Title className={classes.title}>Build</Title>
                         <Text size="sm" color="dimmed">
                             New here? Check out our{' '}
@@ -125,51 +126,60 @@ function Build({ setComponent }) {
                         </Text>
                     </Stack>
                     {submitted && (
-                        <Stack align="flex-start" justify="flex-start" spacing={3} pr="lg">
-                            <Text size="sm" color="dimmed">
-                                Project Actions:
-                            </Text>
-                            <Group position="left">
-                                <Tooltip label="Project Settings">
-                                    <ActionIcon size="lg" radius="md" variant="filled" label="Project Settings">
-                                        <IconSettings size={25} />
-                                    </ActionIcon>
-                                </Tooltip>
-                                <Tooltip label="Restart Project">
-                                    <ActionIcon
-                                        size="lg"
-                                        radius="md"
-                                        color="yellow"
-                                        variant="filled"
-                                        label="Restart Project"
-                                    >
-                                        <IconRefreshAlert size={25} />
-                                    </ActionIcon>
-                                </Tooltip>
-                                <Tooltip label="Trash Project">
-                                    <ActionIcon
-                                        size="lg"
-                                        radius="md"
-                                        color="red"
-                                        variant="filled"
-                                        label="Trash Projec"
-                                        onClick={() => setTrashOpened(true)}
-                                    >
-                                        <IconTrash size={25} />
-                                    </ActionIcon>
-                                </Tooltip>
-                            </Group>
-                        </Stack>
+                        <Group position="apart" my={15} >
+                            {submitted && <Title>{title}</Title>} 
+                            <Stack align="flex-start" justify="flex-start" spacing={3} pr="lg">
+                                <Text size="sm" color="dimmed">
+                                    Project Actions:
+                                </Text>
+                                <Group position="left">
+                                    <Tooltip label="Project Settings">
+                                        <ActionIcon size="lg" radius="md" variant="filled" label="Project Settings">
+                                            <IconSettings size={25} />
+                                        </ActionIcon>
+                                    </Tooltip>
+                                    <Tooltip label="Restart Project">
+                                        <ActionIcon
+                                            size="lg"
+                                            radius="md"
+                                            color="yellow"
+                                            variant="filled"
+                                            label="Restart Project"
+                                        >
+                                            <IconRefreshAlert size={25} />
+                                        </ActionIcon>
+                                    </Tooltip>
+                                    <Tooltip label="Trash Project">
+                                        <ActionIcon
+                                            size="lg"
+                                            radius="md"
+                                            color="red"
+                                            variant="filled"
+                                            label="Trash Projec"
+                                            onClick={() => setTrashOpened(true)}
+                                        >
+                                            <IconTrash size={25} />
+                                        </ActionIcon>
+                                    </Tooltip>
+                                </Group>
+                            </Stack>
+                        </Group>
                     )}
-                </Group>
+                </Stack>
                 {submitted ? (
                     <Grid grow gutter="xs">
-                        <ImageViewer selection={selection} setSelection={setSelection} imageURL={imageURL} selectionReset={selectionReset} setSelectionReset={setSelectionReset} />
+                        <ImageViewer
+                            selection={selection}
+                            setSelection={setSelection}
+                            imageURL={imageURL}
+                            selectionReset={selectionReset}
+                            setSelectionReset={setSelectionReset}
+                        />
                         <CardForm selection={selection} setFormSubmission={setFormSubmission} />
                         <DragnDrop slides={slides} handlers={handlers} />
                     </Grid>
                 ) : (
-                    <Form setImageURL={setImageURL} setSubmitted={setSubmitted} />
+                    <Form setImageURL={setImageURL} setSubmitted={setSubmitted} setTitle={setTitle} />
                 )}
             </Paper>
         </>

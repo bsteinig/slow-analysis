@@ -52,9 +52,9 @@ function Nav({ setActive }) {
     const theme = useMantineTheme();
 
     const data = [
-        { label: 'Overview', value: 'overview', color: 'grape.7', icon: IconSchool },
-        { label: 'Build', value: 'build', color: 'teal.7', icon: IconCrane },
-        { label: 'Preview', value: 'preview', color: 'orange.7', icon: IconChartAreaLine },
+        { label: 'Overview', value: 'overview', color: 'blue', icon: IconSchool },
+        { label: 'Build', value: 'build', color: 'blue', icon: IconCrane },
+        { label: 'Preview', value: 'preview', color: 'blue', icon: IconChartAreaLine },
     ];
 
     const links = data.map((item) => (

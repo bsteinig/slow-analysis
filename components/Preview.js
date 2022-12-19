@@ -14,6 +14,7 @@ import {
     Tooltip,
     useMantineTheme,
 } from '@mantine/core';
+import { IconAppWindow, IconBrowser, IconSourceCode } from '@tabler/icons';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
@@ -24,6 +25,10 @@ const useStyles = createStyles((theme) => ({
         borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3],
         borderWidth: '2px !important',
         borderStyle: 'solid !important',
+    },
+    title: {
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[9],
+        weight: 'bold',
     },
     output: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[1],
@@ -36,6 +41,9 @@ const useStyles = createStyles((theme) => ({
         justifyContent: 'space-around',
         alignItems: 'center',
     },
+    toolbar: {
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : 'white',
+    }
 }));
 
 function Preview({ setComponent, project }) {
@@ -94,7 +102,7 @@ function Preview({ setComponent, project }) {
                                 transitionDuration={200}
                                 label="Use this option to create an HTML file that you can embed in your website. This option is recommended if you want to use your project in a website."
                             >
-                                <Button radius="md">Copy HTML Embed</Button>
+                                <Button leftIcon={<IconBrowser size={24} />} radius="md">Copy HTML Embed</Button>
                             </Tooltip>
                             <Tooltip
                                 multiline
@@ -104,9 +112,9 @@ function Preview({ setComponent, project }) {
                                 transitionDuration={200}
                                 label="Use this option to create an HTML file that you can use to create a standalone application. This option is recommended if you want to use your project offline."
                             >
-                                <Button radius="md">Copy HTML Canvas</Button>
+                                <Button leftIcon={<IconAppWindow size={24} />} radius="md">Copy HTML Canvas</Button>
                             </Tooltip>
-                            <Button color="teal" radius="md" onClick={() => setShowSource(!showSource)}>
+                            <Button leftIcon={<IconSourceCode size={24} />} color="teal" radius="md" onClick={() => setShowSource(!showSource)}>
                                 View Source Code
                             </Button>
                         </Group>

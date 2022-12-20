@@ -102,6 +102,7 @@ function CardForm({ selection, setFormSubmission }) {
                             size="md"
                             withAsterisk
                             {...componentForm.getInputProps('graphicalFeature')}
+                            disabled={!selection.active}
                         />
                         <Textarea
                             label="Description"
@@ -111,6 +112,7 @@ function CardForm({ selection, setFormSubmission }) {
                             minRows={4}
                             maxRows={6}
                             {...componentForm.getInputProps('description')}
+                            disabled={!selection.active}
                         />
                         <Button
                             type="submit"
@@ -119,6 +121,7 @@ function CardForm({ selection, setFormSubmission }) {
                             radius="md"
                             size="md"
                             className={classes.submit}
+                            disabled={!selection.active}
                         >
                             Save
                         </Button>

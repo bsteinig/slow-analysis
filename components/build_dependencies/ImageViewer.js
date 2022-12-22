@@ -84,7 +84,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                 aspectRatio: imageRef.current.naturalWidth / imageRef.current.naturalHeight,
             });
         }
-    }, [imageURL]);
+    }, [imageRef]);
 
     // Selection state
     const [startValue, setStartValue] = useState({ x: 0, y: 0 });
@@ -106,6 +106,22 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     const [keyboardMove, toggleKeyboardMove] = useToggle();
     const [keyboardResize, toggleKeyboardResize] = useToggle();
 
+    const handleKeyboardToggle = () => {
+        if (keyboardEnabled) {
+            setStartValue({ x: keyboardSelection.startX, y: keyboardSelection.startY });
+            setValue({ x: keyboardSelection.endX, y: keyboardSelection.endY });
+        } else {
+            setKeyboardSelection({
+                startX: selection.startX,
+                startY: selection.startY,
+                endX: selection.endX,
+                endY: selection.endY,
+                active: false,
+            });
+        }
+        toggleKeyboard();
+    };
+
     // Keyboard Move handler
     // When keyboardMove becomes true create an event listener for arrow key presses and move the selection box accordingly
     // When keyboardMove becomes false remove the event listener and update selection
@@ -117,16 +133,16 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                     setKeyboardSelection((prev) => {
                         return {
                             ...prev,
-                            startY: prev.startY - 0.01,
-                            endY: prev.endY - 0.01,
+                            startY: Math.max(0, prev.startY - 0.01),
+                            endY: prev.startY === 0 ? prev.endY : prev.endY - 0.01,
                         };
                     });
                 } else if (e.key === 'ArrowDown') {
                     setKeyboardSelection((prev) => {
                         return {
                             ...prev,
-                            startY: prev.startY + 0.01,
-                            endY: prev.endY + 0.01,
+                            startY: prev.endY === 1 ? prev.startY : prev.startY + 0.01,
+                            endY: Math.min(1, prev.endY + 0.01),
                         };
                     });
                 } else if (e.key === 'ArrowLeft') {
@@ -172,33 +188,33 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             const handleKeyDown = (e) => {
                 e.preventDefault();
                 if (e.key === 'ArrowUp') {
-                    setKeyboardSelection((prev) => {
-                        return {
-                            ...prev,
-                            endY: prev.endY - 0.01,
-                        };
-                    });
+                        setKeyboardSelection((prev) => {
+                            return {
+                                ...prev,
+                                endY: Math.max(prev.startY, prev.endY - 0.01),
+                            };
+                        });
                 } else if (e.key === 'ArrowDown') {
-                    setKeyboardSelection((prev) => {
-                        return {
-                            ...prev,
-                            endY: prev.endY + 0.01,
-                        };
-                    });
+                        setKeyboardSelection((prev) => {
+                            return {
+                                ...prev,
+                                endY: Math.min(1, prev.endY + 0.01),
+                            };
+                        });
                 } else if (e.key === 'ArrowLeft') {
-                    setKeyboardSelection((prev) => {
-                        return {
-                            ...prev,
-                            endX: prev.endX - 0.01,
-                        };
-                    });
+                        setKeyboardSelection((prev) => {
+                            return {
+                                ...prev,
+                                endX: Math.max(prev.startX, prev.endX - 0.01),
+                            };
+                        });
                 } else if (e.key === 'ArrowRight') {
-                    setKeyboardSelection((prev) => {
-                        return {
-                            ...prev,
-                            endX: prev.endX + 0.01,
-                        };
-                    });
+                        setKeyboardSelection((prev) => {
+                            return {
+                                ...prev,
+                                endX: Math.min(1, prev.endX + 0.01),
+                            };
+                        });
                 } else if (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Space') {
                     toggleKeyboardResize();
                 }
@@ -225,9 +241,15 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
 
     // Mouse selection
     useEffect(() => {
+        console.log('this is dumb', active, keyboardEnabled, 'keyboardEnabled')
         if (!keyboardEnabled) {
             if (active) {
-                setSelection({ active: false, x: 0, y: 0, width: 0, height: 0 });
+                setSelection({                        
+                    active: false,
+                    startX: 0,
+                    startY: 0,
+                    endX: 0,
+                    endY: 0, });
             } else {
                 if (value.x === 0 && value.y === 0 && startValue.x === 0 && startValue.y === 0) {
                     return;
@@ -278,7 +300,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                         variant="light"
                         radius="md"
                         style={{ width: 'fit-content' }}
-                        onClick={() => toggleKeyboard()}
+                        onClick={() => handleKeyboardToggle()}
                     >
                         {keyboardEnabled ? 'Disable' : 'Enable'} Keyboard Selection
                     </Button>

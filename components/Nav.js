@@ -15,6 +15,7 @@ import React from 'react';
 
 const useStyles = createStyles((theme) => ({
     root: {
+        position: 'absolute',
         top: 30,
         left: '50%',
         transform: 'translate(-50%, 0)',
@@ -80,7 +81,7 @@ function Nav({ setActive }) {
     return (
         <Navbar
             height={70}
-            fixed={true}
+            fixed={false}
             p="sm"
             width={{ base: '90vw', xs: '80vw', sm: '70vw', md: '60vw', lg: '50vw' }}
             className={classes.root}

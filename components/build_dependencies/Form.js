@@ -241,6 +241,7 @@ function Form({ setImageURL, setSubmitted, setTitle }) {
                                     disabled={upload.values.title == ''}
                                     aria-label="Submit"
                                     onClick={() => handleUploadSubmission()}
+                                    type="submit"
                                 >
                                     Submit
                                 </Button>

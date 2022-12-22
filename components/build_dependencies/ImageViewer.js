@@ -1,14 +1,15 @@
 import {
     ActionIcon,
-    BackgroundImage,
     Badge,
     Box,
     Button,
     Code,
     Collapse,
+    Container,
     createStyles,
     Grid,
     Group,
+    Image,
     Overlay,
     Paper,
     Stack,
@@ -21,12 +22,10 @@ import {
     IconEye,
     IconEyeOff,
     IconLock,
-    IconLockOff,
     IconLockOpen,
     IconRefresh,
     IconReportAnalytics,
     IconSlashes,
-    IconTexture,
 } from '@tabler/icons';
 import React, { useState, useEffect } from 'react';
 
@@ -37,10 +36,30 @@ const useStyles = createStyles((theme) => ({
         borderStyle: 'solid',
         borderWidth: 1,
     },
-    bgImage: {
-        backgroundSize: 'contain !important',
-        backgroundRepeat: 'no-repeat !important',
+    imageContainer: {
         position: 'relative',
+
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    highlight: {
+        position: 'absolute',
+        top: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        height: '100%',
+        zIndex: 10,
+    },
+    image: {
+        width: '100%',
+        objectFit: 'contain',
+
+        '& > img': {
+            width: '100%',
+            maxHeight: '400px',
+            objectFit: 'contain',
+        },
     },
 }));
 
@@ -53,6 +72,19 @@ const useStyles = createStyles((theme) => ({
 */
 function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSelectionReset }) {
     const { classes, theme } = useStyles();
+
+    // Get intrinsic image size and calculate aspect ratio
+    const [imageSize, setImageSize] = useState({ width: 0, height: 0, aspectRatio: 0 });
+    const imageRef = React.useRef(null);
+    useEffect(() => {
+        if (imageRef.current) {
+            setImageSize({
+                width: imageRef.current.naturalWidth,
+                height: imageRef.current.naturalHeight,
+                aspectRatio: imageRef.current.naturalWidth / imageRef.current.naturalHeight,
+            });
+        }
+    }, [imageURL]);
 
     // Selection state
     const [startValue, setStartValue] = useState({ x: 0, y: 0 });
@@ -167,7 +199,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                             endX: prev.endX + 0.01,
                         };
                     });
-                }else if (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Space') {
+                } else if (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Space') {
                     toggleKeyboardResize();
                 }
             };
@@ -185,7 +217,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             });
         }
     }, [keyboardResize]);
-
 
     // Lock,View, and Stats state
     const [locked, toggleLock] = useToggle();
@@ -258,17 +289,16 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                     </Collapse>
                 </Stack>
 
-                <BackgroundImage src={imageURL} radius="sm" className={classes.bgImage}>
+                <Container className={classes.imageContainer}>
                     {locked && <Overlay opacity={0} color="red" zIndex={5} />}
                     <Box
+                        className={classes.highlight}
                         sx={(theme) => ({
-                            height: 400,
-                            position: 'relative',
                             backgroundColor: !view
                                 ? theme.fn.rgba(theme.colors.gray[9], 0.75)
                                 : theme.fn.rgba(theme.colors.gray[9], 0),
+                            aspectRatio: `${imageSize.aspectRatio}`
                         })}
-                        mx="auto"
                         ref={mergedRef}
                         onMouseDown={() => {
                             setStartValue({
@@ -305,7 +335,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                                         <IconArrowsMove size={20} />
                                     </ActionIcon>
                                     <ActionIcon p={0} onClick={() => toggleKeyboardResize()}>
-                                        <IconSlashes size={20}  />
+                                        <IconSlashes size={20} />
                                     </ActionIcon>
                                 </Group>
                             </div>
@@ -339,7 +369,8 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                             />
                         )}
                     </Box>
-                </BackgroundImage>
+                    <Image src={imageURL} imageRef={imageRef} alt="Graph Image" className={classes.image} fit="contain" />
+                </Container>
                 <Stack justify="flex-start" spacing={2}>
                     <Text pt="sm" size="sm" color="dimmed">
                         Image Settings:

@@ -188,33 +188,33 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             const handleKeyDown = (e) => {
                 e.preventDefault();
                 if (e.key === 'ArrowUp') {
-                        setKeyboardSelection((prev) => {
-                            return {
-                                ...prev,
-                                endY: Math.max(prev.startY, prev.endY - 0.01),
-                            };
-                        });
+                    setKeyboardSelection((prev) => {
+                        return {
+                            ...prev,
+                            endY: Math.max(prev.startY, prev.endY - 0.01),
+                        };
+                    });
                 } else if (e.key === 'ArrowDown') {
-                        setKeyboardSelection((prev) => {
-                            return {
-                                ...prev,
-                                endY: Math.min(1, prev.endY + 0.01),
-                            };
-                        });
+                    setKeyboardSelection((prev) => {
+                        return {
+                            ...prev,
+                            endY: Math.min(1, prev.endY + 0.01),
+                        };
+                    });
                 } else if (e.key === 'ArrowLeft') {
-                        setKeyboardSelection((prev) => {
-                            return {
-                                ...prev,
-                                endX: Math.max(prev.startX, prev.endX - 0.01),
-                            };
-                        });
+                    setKeyboardSelection((prev) => {
+                        return {
+                            ...prev,
+                            endX: Math.max(prev.startX, prev.endX - 0.01),
+                        };
+                    });
                 } else if (e.key === 'ArrowRight') {
-                        setKeyboardSelection((prev) => {
-                            return {
-                                ...prev,
-                                endX: Math.min(1, prev.endX + 0.01),
-                            };
-                        });
+                    setKeyboardSelection((prev) => {
+                        return {
+                            ...prev,
+                            endX: Math.min(1, prev.endX + 0.01),
+                        };
+                    });
                 } else if (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Space') {
                     toggleKeyboardResize();
                 }
@@ -241,15 +241,15 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
 
     // Mouse selection
     useEffect(() => {
-        console.log('this is dumb', active, keyboardEnabled, 'keyboardEnabled')
-        if (!keyboardEnabled) {
+        if (!keyboardEnabled && !locked) {
             if (active) {
-                setSelection({                        
+                setSelection({
                     active: false,
                     startX: 0,
                     startY: 0,
                     endX: 0,
-                    endY: 0, });
+                    endY: 0,
+                });
             } else {
                 if (value.x === 0 && value.y === 0 && startValue.x === 0 && startValue.y === 0) {
                     return;
@@ -312,21 +312,21 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                 </Stack>
 
                 <Container className={classes.imageContainer}>
-                    {locked && <Overlay opacity={0} color="red" zIndex={5} />}
+                    {locked && <Overlay opacity={0} color="red" zIndex={12} />}
                     <Box
                         className={classes.highlight}
                         sx={(theme) => ({
                             backgroundColor: !view
                                 ? theme.fn.rgba(theme.colors.gray[9], 0.75)
                                 : theme.fn.rgba(theme.colors.gray[9], 0),
-                            aspectRatio: `${imageSize.aspectRatio}`
+                            aspectRatio: `${imageSize.aspectRatio}`,
                         })}
                         ref={mergedRef}
                         onMouseDown={() => {
-                            setStartValue({
-                                x: mouseX / width,
-                                y: mouseY / height,
-                            });
+                                setStartValue({
+                                    x: mouseX / width,
+                                    y: mouseY / height,
+                                });
                         }}
                         onMouseUp={() => {
                             setSelection({
@@ -354,10 +354,10 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                             >
                                 <Group noWrap position="apart">
                                     <ActionIcon p={0} onClick={() => toggleKeyboardMove()}>
-                                        <IconArrowsMove size={20} />
+                                        <IconArrowsMove size={20} color={view ? 'none' : 'white'} />
                                     </ActionIcon>
                                     <ActionIcon p={0} onClick={() => toggleKeyboardResize()}>
-                                        <IconSlashes size={20} />
+                                        <IconSlashes size={20} color={view ? 'none' : 'white'} />
                                     </ActionIcon>
                                 </Group>
                             </div>
@@ -391,7 +391,13 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                             />
                         )}
                     </Box>
-                    <Image src={imageURL} imageRef={imageRef} alt="Graph Image" className={classes.image} fit="contain" />
+                    <Image
+                        src={imageURL}
+                        imageRef={imageRef}
+                        alt="Graph Image"
+                        className={classes.image}
+                        fit="contain"
+                    />
                 </Container>
                 <Stack justify="flex-start" spacing={2}>
                     <Text pt="sm" size="sm" color="dimmed">

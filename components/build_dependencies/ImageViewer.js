@@ -323,10 +323,10 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                         })}
                         ref={mergedRef}
                         onMouseDown={() => {
-                                setStartValue({
-                                    x: mouseX / width,
-                                    y: mouseY / height,
-                                });
+                            setStartValue({
+                                x: mouseX / width,
+                                y: mouseY / height,
+                            });
                         }}
                         onMouseUp={() => {
                             setSelection({
@@ -419,20 +419,22 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                                     {view ? <IconEye size={25} /> : <IconEyeOff size={25} />}
                                 </ActionIcon>
                             </Tooltip>
-                            <Tooltip
-                                label={locked ? 'Unlock Selection' : 'Lock Selection'}
-                                events={{ hover: true, focus: true, touch: false }}
-                            >
-                                <ActionIcon
-                                    size="lg"
-                                    radius="md"
-                                    variant="filled"
+                            {!keyboardEnabled && (
+                                <Tooltip
                                     label={locked ? 'Unlock Selection' : 'Lock Selection'}
-                                    onClick={() => toggleLock()}
+                                    events={{ hover: true, focus: true, touch: false }}
                                 >
-                                    {locked ? <IconLockOpen size={25} /> : <IconLock size={25} />}
-                                </ActionIcon>
-                            </Tooltip>
+                                    <ActionIcon
+                                        size="lg"
+                                        radius="md"
+                                        variant="filled"
+                                        label={locked ? 'Unlock Selection' : 'Lock Selection'}
+                                        onClick={() => toggleLock()}
+                                    >
+                                        {locked ? <IconLockOpen size={25} /> : <IconLock size={25} />}
+                                    </ActionIcon>
+                                </Tooltip>
+                            )}
                             <Tooltip label="Reset Selection" events={{ hover: true, focus: true, touch: false }}>
                                 <ActionIcon
                                     size="lg"

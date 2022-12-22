@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PROJECT TITLE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="style.css" type="text/css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/preact@latest/dist/preact.min.js"></script>
+    <script src="https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+    <script type="text/babel">
+      const React = preact;
+      // import { useState } from "preact/hooks";
+      import { useState } from "preact/hooks";
+
+      function ImageComp() {
+        return (
+          <div class="img-comp">
+            <div class="img-comp-highlight" id="highlight"></div>
+            <img
+              src="https://ourworldindata.org/uploads/2018/11/Annual-World-Population-since-10-thousand-BCE-for-OWID-800x498.png"
+              alt="graph"
+              class="responsive"
+            />
+          </div>
+        );
+      }
+
+      function InfoComp() {
+        const comp_title = [
+          "Graph",
+          "Title",
+          "Source",
+          "X-Axis",
+          "Y-Axis",
+          "Line",
+        ];
+        const comp_content = [
+          "This is a line graph displaying changes in a quantitative value, or number, over a continuous interval or time period. A line graph is often used to show how data has changed over time. How do you read this line graph? Use the next and back buttons to explore and learn. ",
+          "As the title indicates, this line graph shows changes in the world population, or the total number of people living in the world, over the past 12,000 years.",
+          'The source information shows us that the data was gathered by Our World in Data authors from two sources: the <a href="https://www.un.org/en/">History Database of the Global Environment</a> and the <a href="https://www.un.org/en/">United Nations</a>. This global organization, UN, is considered a reliable source, partly because it has people from nations all over the world fact checking its information. Click on the link to learn more about the United Nations. ',
+          "The x-axis shows the years over which data is provided. Notice it begins on the left with 10,000 BCE. BCE stands for Before Common Era. We live in the Common Era, denoted as CE. Also notice that the last year marked on the x-axis is 2000 but it extends a little bit beyond that to show data up until roughly the present day. There are 2000 years between each tick mark. Because there is so much time squeezed into a small amount of space, the graph creators had to start labeling the line with different points to show the population for different years.",
+          "The y-axis shows the number of people in billions. Because even one billion is such a big number, notice that the people designing this graph had to make the first number half a billion and label any points below that so we know how many people are represented by a line that looks flat but is not actually flat.",
+          "The line shows the change in population over time. The labeled values toward the bottom of the graph, which are increasing, tells us that the line is not flat. It just looks that way because the intervals between years on the y-axis are so huge. Notice how the line starts to go up really quickly close to the 2000 mark. We can see by the label for the point right at the steep incline that the increased growth rate starts happening around 1700, when the world population was 600 million. The graph creators have highlighted points along the line that mark important turning points in the world population. Toward the bottom, they label the world population at the turn of each century. Then, they begin to label points at which the world population grows by another billion.",
+        ];
+
+        const [current, setCurrent] = useState(0);
+
+        return (
+          <div class="info-comp">
+            <h1 class="headline">
+              Size of World Population Over the Last 12,000 Years
+            </h1>
+            <div class="btn-group">
+              {" "}
+              <button class="btn" onclick="backClick()">
+                Back
+              </button>{" "}
+              <button class="btn" onclick="nextClick()">
+                Next
+              </button>{" "}
+            </div>
+            <h3 class="comp-title" id="comp-title">
+              Click Next to begin
+            </h3>
+            <h5 class="comp-info" id="comp-info"></h5>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <main class="container">
+            <ImageComp />
+            <InfoComp />
+          </main>
+        );
+      }
+
+      preact.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

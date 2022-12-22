@@ -101,6 +101,7 @@ function Preview({ setComponent, project }) {
                                 transition="fade"
                                 transitionDuration={200}
                                 label="Use this option to create an HTML file that you can embed in your website. This option is recommended if you want to use your project in a website."
+                                events={{ hover: true, focus: true, touch: false }}
                             >
                                 <Button leftIcon={<IconBrowser size={24} />} radius="md">Copy HTML Embed</Button>
                             </Tooltip>
@@ -111,6 +112,7 @@ function Preview({ setComponent, project }) {
                                 transition="fade"
                                 transitionDuration={200}
                                 label="Use this option to create an HTML file that you can use to create a standalone application. This option is recommended if you want to use your project offline."
+                                events={{ hover: true, focus: true, touch: false }}
                             >
                                 <Button leftIcon={<IconAppWindow size={24} />} radius="md">Copy HTML Canvas</Button>
                             </Tooltip>

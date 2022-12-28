@@ -10,13 +10,15 @@ import {
     Grid,
     Group,
     Image,
+    Kbd,
     Overlay,
     Paper,
+    Space,
     Stack,
     Text,
     Tooltip,
 } from '@mantine/core';
-import { useElementSize, useMergedRef, useMouse, useMove, useToggle } from '@mantine/hooks';
+import { useElementSize, useFocusTrap, useMergedRef, useMouse, useMove, useToggle } from '@mantine/hooks';
 import {
     IconArrowsMove,
     IconEye,
@@ -106,6 +108,8 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     const [keyboardMove, toggleKeyboardMove] = useToggle();
     const [keyboardResize, toggleKeyboardResize] = useToggle();
 
+    const focusTrapRef = useFocusTrap(keyboardEnabled);
+
     const handleKeyboardToggle = () => {
         if (keyboardEnabled) {
             setStartValue({ x: keyboardSelection.startX, y: keyboardSelection.startY });
@@ -121,6 +125,21 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         }
         toggleKeyboard();
     };
+
+    // keyboard selection esc key handler
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                toggleKeyboard();
+            }
+        };
+        if (keyboardEnabled) {
+            window.addEventListener('keydown', handleKeyDown);
+        }
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [keyboardEnabled]);
 
     // Keyboard Move handler
     // When keyboardMove becomes true create an event listener for arrow key presses and move the selection box accordingly
@@ -294,7 +313,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
 
     return (
         <Grid.Col md={7} lg={8}>
-            <Paper withBorder radius="md" p="md" className={classes.root}>
+            <Paper withBorder radius="md" p="md" className={classes.root} ref={focusTrapRef}>
                 <Stack spacing="xs" mb={15}>
                     <Button
                         variant="light"
@@ -305,9 +324,15 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                         {keyboardEnabled ? 'Disable' : 'Enable'} Keyboard Selection
                     </Button>
                     <Collapse in={keyboardEnabled}>
-                        <Text size="xs" color="gray">
-                            Use the arrow keys to move the selection box. Press the spacebar to confirm.
-                        </Text>
+                        <Stack spacing="xs">
+                            <Text size="sm" color="dimmed">
+                                Select the move handle with enter and use the arrow keys to move the
+                                selection.
+                                Select the resize handle with enter and use the arrow keys to resize the
+                                selection.
+                                Press <Kbd>esc</Kbd> or click &quot;Disable Keyboard Selection&quot; to exit keyboard selection mode.
+                            </Text>
+                        </Stack>
                     </Collapse>
                 </Stack>
 

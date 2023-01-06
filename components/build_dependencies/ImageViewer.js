@@ -95,7 +95,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     const mergedRef = useMergedRef(mouseRef, moveRef, sizeRef);
 
     // Keyboard selection state
-    
     const [keyboardSelection, setKeyboardSelection] = useState({
         startX: 0.05,
         startY: 0.05,
@@ -105,23 +104,24 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     });
     const [keyboardMove, toggleKeyboardMove] = useToggle();
     const [keyboardResize, toggleKeyboardResize] = useToggle();
+    const [keyboardActive, toggleKeyboardActive] = useToggle();
 
-    const focusTrapRef = useFocusTrap(keyboardEnabled);
-    
+    const focusTrapRef = useFocusTrap(keyboardActive);
+
     // keyboard selection esc key handler
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') {
-                toggleKeyboard();
+                toggleKeyboardActive();
             }
         };
-        if (keyboardEnabled) {
+        if (keyboardActive) {
             window.addEventListener('keydown', handleKeyDown);
         }
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [keyboardEnabled]);
+    }, [keyboardActive]);
 
     // Keyboard Move handler
     // When keyboardMove becomes true create an event listener for arrow key presses and move the selection box accordingly

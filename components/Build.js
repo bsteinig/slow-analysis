@@ -12,7 +12,7 @@ import {
     Title,
     Tooltip,
 } from '@mantine/core';
-import { useListState, useLocalStorage, useSessionStorage } from '@mantine/hooks';
+import { useListState, useLocalStorage, useSessionStorage, useToggle } from '@mantine/hooks';
 import { IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
@@ -41,6 +41,7 @@ function Build({ setComponent, setProject }) {
 
     // Selection state
     const [selection, setSelection] = useState({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
+    const [keyboardEnabled, toggleKeyboard] = useToggle();
 
     // Slides state
     const [storeSlides, setStoreSlides] = useSessionStorage({ key: 'slides', defaultValue: [] });
@@ -97,13 +98,13 @@ function Build({ setComponent, setProject }) {
         setStoreSlides(slides);
     }, [slides]);
 
-        // Only retrieve slides from storage on load
-        useEffect(() => {
-            if (storeSlides != slides) {
-                //console.log('retrieving slides from storage', storeSlides);
-                handlers.setState(storeSlides);
-            }
-        }, [storeSlides]);
+    // Only retrieve slides from storage on load
+    useEffect(() => {
+        if (storeSlides != slides) {
+            //console.log('retrieving slides from storage', storeSlides);
+            handlers.setState(storeSlides);
+        }
+    }, [storeSlides]);
 
     // Project handler
     useEffect(() => {
@@ -114,10 +115,14 @@ function Build({ setComponent, setProject }) {
         });
     }, [imageURL, title, slides]);
 
-
     return (
         <>
-            <Modal opened={trashOpened} onClose={() => setTrashOpened(false)} title="Warning! Deleting Project" zIndex={1000}>
+            <Modal
+                opened={trashOpened}
+                onClose={() => setTrashOpened(false)}
+                title="Warning! Deleting Project"
+                zIndex={1000}
+            >
                 <Text size="sm" color="dimmed">
                     By continuing you will be deleting the current project. This action cannot be undone.
                 </Text>
@@ -130,7 +135,12 @@ function Build({ setComponent, setProject }) {
                     </Button>
                 </Group>
             </Modal>
-            <Modal opened={restartOpened} onClose={() => setRestartOpened(false)} title="Warning! Restarting Project" zIndex={1000}>
+            <Modal
+                opened={restartOpened}
+                onClose={() => setRestartOpened(false)}
+                title="Warning! Restarting Project"
+                zIndex={1000}
+            >
                 <Text size="sm" color="dimmed">
                     By continuing you will be deleting all slides and selections. This action cannot be undone.
                 </Text>
@@ -140,6 +150,21 @@ function Build({ setComponent, setProject }) {
                     </Button>
                     <Button variant="outline" color="red" onClick={() => handleProjectRestart()}>
                         Restart
+                    </Button>
+                </Group>
+            </Modal>
+            <Modal opened={settingsOpened} onClose={() => setSettingsOpened(false)} title="Settings" zIndex={1000}>
+                <Button
+                    variant="light"
+                    radius="md"
+                    style={{ width: 'fit-content' }}
+                    onClick={() => toggleKeyboard()}
+                >
+                    {keyboardEnabled ? 'Disable' : 'Enable'} Keyboard Selection
+                </Button>
+                <Group position="center" mt={20}>
+                    <Button variant="outline" onClick={() => setSettingsOpened(false)}>
+                        Close
                     </Button>
                 </Group>
             </Modal>
@@ -156,19 +181,31 @@ function Build({ setComponent, setProject }) {
                         </Text>
                     </Stack>
                     {submitted && (
-                        <Group position="apart" my={15} >
-                            {submitted && <Title>{title}</Title>} 
+                        <Group position="apart" my={15}>
+                            {submitted && <Title>{title}</Title>}
                             <Stack align="flex-start" justify="flex-start" spacing={3} pr="lg">
                                 <Text size="sm" color="dimmed">
                                     Project Actions:
                                 </Text>
                                 <Group position="left">
-                                    <Tooltip label="Project Settings" events={{ hover: true, focus: true, touch: false }}>
-                                        <ActionIcon size="lg" radius="md" variant="filled" label="Project Settings">
+                                    <Tooltip
+                                        label="Project Settings"
+                                        events={{ hover: true, focus: true, touch: false }}
+                                    >
+                                        <ActionIcon
+                                            size="lg"
+                                            radius="md"
+                                            variant="filled"
+                                            label="Project Settings"
+                                            onClick={() => setSettingsOpened(true)}
+                                        >
                                             <IconSettings size={25} />
                                         </ActionIcon>
                                     </Tooltip>
-                                    <Tooltip label="Restart Project" events={{ hover: true, focus: true, touch: false }}>
+                                    <Tooltip
+                                        label="Restart Project"
+                                        events={{ hover: true, focus: true, touch: false }}
+                                    >
                                         <ActionIcon
                                             size="lg"
                                             radius="md"
@@ -205,6 +242,8 @@ function Build({ setComponent, setProject }) {
                             imageURL={imageURL}
                             selectionReset={selectionReset}
                             setSelectionReset={setSelectionReset}
+                            keyboardEnabled={keyboardEnabled}
+                            toggleKeyboard={toggleKeyboard}
                         />
                         <CardForm selection={selection} setFormSubmission={setFormSubmission} />
                         <DragnDrop slides={slides} handlers={handlers} />

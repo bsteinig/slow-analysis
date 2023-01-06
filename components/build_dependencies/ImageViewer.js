@@ -72,7 +72,7 @@ const useStyles = createStyles((theme) => ({
     selection: active: boolean, x: number, y: number, width: number, height: number
     setSelection: function
 */
-function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSelectionReset }) {
+function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSelectionReset, keyboardEnabled, toggleKeyboard }) {
     const { classes, theme } = useStyles();
 
     // Get intrinsic image size and calculate aspect ratio
@@ -95,7 +95,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     const mergedRef = useMergedRef(mouseRef, moveRef, sizeRef);
 
     // Keyboard selection state
-    const [keyboardEnabled, toggleKeyboard] = useToggle();
+    
     const [keyboardSelection, setKeyboardSelection] = useState({
         startX: 0.05,
         startY: 0.05,
@@ -107,26 +107,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     const [keyboardResize, toggleKeyboardResize] = useToggle();
 
     const focusTrapRef = useFocusTrap(keyboardEnabled);
-
-    const handleKeyboardToggle = () => {
-        if (keyboardEnabled) {
-            setStartValue({ x: keyboardSelection.startX, y: keyboardSelection.startY });
-            setValue({ x: keyboardSelection.endX, y: keyboardSelection.endY });
-        } else {
-            // use keyboardSelection if seleciton is all zeros
-            if (selection.x === 0 && selection.y === 0 && selection.width === 0 && selection.height === 0) {
-                setKeyboardSelection({
-                    startX: selection.startX,
-                    startY: selection.startY,
-                    endX: selection.endX,
-                    endY: selection.endY,
-                    active: false,
-                });
-            }
-        }
-        toggleKeyboard();
-    };
-
+    
     // keyboard selection esc key handler
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -320,14 +301,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         <Grid.Col md={7} lg={8}>
             <Paper withBorder radius="md" p="md" className={classes.root} ref={focusTrapRef}>
                 <Stack spacing="xs" mb={15}>
-                    <Button
-                        variant="light"
-                        radius="md"
-                        style={{ width: 'fit-content' }}
-                        onClick={() => handleKeyboardToggle()}
-                    >
-                        {keyboardEnabled ? 'Disable' : 'Enable'} Keyboard Selection
-                    </Button>
                     <Collapse in={keyboardEnabled}>
                         <Stack spacing="xs">
                             <Text size="sm" color="dimmed">

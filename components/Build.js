@@ -66,6 +66,13 @@ function Build({ setComponent, setProject }) {
         setTrashOpened(false);
     };
 
+    const handleProjectRestart = () => {
+        setSelection({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
+        handlers.setState([]);
+        setStoreSlides([]);
+        setRestartOpened(false);
+    };
+
     // Form handlers
     useEffect(() => {
         console.log('formSubmission', formSubmission);
@@ -123,6 +130,19 @@ function Build({ setComponent, setProject }) {
                     </Button>
                 </Group>
             </Modal>
+            <Modal opened={restartOpened} onClose={() => setRestartOpened(false)} title="Warning! Restarting Project" zIndex={1000}>
+                <Text size="sm" color="dimmed">
+                    By continuing you will be deleting all slides and selections. This action cannot be undone.
+                </Text>
+                <Group position="center" mt={20}>
+                    <Button variant="outline" onClick={() => setRestartOpened(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="outline" color="red" onClick={() => handleProjectRestart()}>
+                        Restart
+                    </Button>
+                </Group>
+            </Modal>
             <Paper shadow="md" p="lg" radius="lg" my={20} className={classes.root}>
                 <Stack spacing={0}>
                     <Stack align="flex-start" justify="flex-start" spacing={0} pl={20}>
@@ -143,23 +163,24 @@ function Build({ setComponent, setProject }) {
                                     Project Actions:
                                 </Text>
                                 <Group position="left">
-                                    <Tooltip label="Project Settings">
+                                    <Tooltip label="Project Settings" events={{ hover: true, focus: true, touch: false }}>
                                         <ActionIcon size="lg" radius="md" variant="filled" label="Project Settings">
                                             <IconSettings size={25} />
                                         </ActionIcon>
                                     </Tooltip>
-                                    <Tooltip label="Restart Project">
+                                    <Tooltip label="Restart Project" events={{ hover: true, focus: true, touch: false }}>
                                         <ActionIcon
                                             size="lg"
                                             radius="md"
                                             color="yellow"
                                             variant="filled"
                                             label="Restart Project"
+                                            onClick={() => setRestartOpened(true)}
                                         >
                                             <IconRefreshAlert size={25} />
                                         </ActionIcon>
                                     </Tooltip>
-                                    <Tooltip label="Trash Project">
+                                    <Tooltip label="Trash Project" events={{ hover: true, focus: true, touch: false }}>
                                         <ActionIcon
                                             size="lg"
                                             radius="md"

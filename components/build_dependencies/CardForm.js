@@ -94,7 +94,7 @@ function CardForm({ selection, setFormSubmission }) {
                 </Stack>
 
                 <form onSubmit={componentForm.onSubmit((values) => handleFormSubmit(values))}>
-                    <Stack px="sm">
+                    <Stack px="sm" style={{ height: '400px' }}>
                         <TextInput
                             label="Graphical Feature"
                             placeholder="Describe the selected area"
@@ -109,8 +109,8 @@ function CardForm({ selection, setFormSubmission }) {
                             radius="md"
                             size="sm"
                             autosize
-                            minRows={4}
-                            maxRows={6}
+                            minRows={6}
+                            maxRows={8}
                             {...componentForm.getInputProps('description')}
                             disabled={!selection.active}
                         />

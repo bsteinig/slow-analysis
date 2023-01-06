@@ -76,17 +76,15 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
     const { classes, theme } = useStyles();
 
     // Get intrinsic image size and calculate aspect ratio
-    const [imageSize, setImageSize] = useState({ width: 0, height: 0, aspectRatio: 0 });
-    const imageRef = React.useRef(null);
-    useEffect(() => {
-        if (imageRef.current) {
-            setImageSize({
-                width: imageRef.current.naturalWidth,
-                height: imageRef.current.naturalHeight,
-                aspectRatio: imageRef.current.naturalWidth / imageRef.current.naturalHeight,
-            });
-        }
-    }, [imageRef]);
+    const [imageSize, setImageSize] = useState({ width: 0, height: 0, aspectRatio: 1.6 });
+
+    const handleImageLoad = (e) => {
+        setImageSize({
+            width: e.target.naturalWidth,
+            height: e.target.naturalHeight,
+            aspectRatio: e.target.naturalWidth / e.target.naturalHeight,
+        });
+    };
 
     // Selection state
     const [startValue, setStartValue] = useState({ x: 0, y: 0 });
@@ -115,13 +113,16 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             setStartValue({ x: keyboardSelection.startX, y: keyboardSelection.startY });
             setValue({ x: keyboardSelection.endX, y: keyboardSelection.endY });
         } else {
-            setKeyboardSelection({
-                startX: selection.startX,
-                startY: selection.startY,
-                endX: selection.endX,
-                endY: selection.endY,
-                active: false,
-            });
+            // use keyboardSelection if seleciton is all zeros
+            if (selection.x === 0 && selection.y === 0 && selection.width === 0 && selection.height === 0) {
+                setKeyboardSelection({
+                    startX: selection.startX,
+                    startY: selection.startY,
+                    endX: selection.endX,
+                    endY: selection.endY,
+                    active: false,
+                });
+            }
         }
         toggleKeyboard();
     };
@@ -189,13 +190,15 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                 window.removeEventListener('keydown', handleKeyDown);
             };
         } else {
-            setSelection({
-                active: true,
-                startX: keyboardSelection.startX,
-                startY: keyboardSelection.startY,
-                endX: keyboardSelection.endX,
-                endY: keyboardSelection.endY,
-            });
+            if (keyboardEnabled) {
+                setSelection({
+                    active: true,
+                    startX: keyboardSelection.startX,
+                    startY: keyboardSelection.startY,
+                    endX: keyboardSelection.endX,
+                    endY: keyboardSelection.endY,
+                });
+            }
         }
     }, [keyboardMove]);
 
@@ -243,13 +246,15 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                 window.removeEventListener('keydown', handleKeyDown);
             };
         } else {
-            setSelection({
-                active: true,
-                startX: keyboardSelection.startX,
-                startY: keyboardSelection.startY,
-                endX: keyboardSelection.endX,
-                endY: keyboardSelection.endY,
-            });
+            if (keyboardEnabled) {
+                setSelection({
+                    active: true,
+                    startX: keyboardSelection.startX,
+                    startY: keyboardSelection.startY,
+                    endX: keyboardSelection.endX,
+                    endY: keyboardSelection.endY,
+                });
+            }
         }
     }, [keyboardResize]);
 
@@ -326,11 +331,10 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                     <Collapse in={keyboardEnabled}>
                         <Stack spacing="xs">
                             <Text size="sm" color="dimmed">
-                                Select the move handle with enter and use the arrow keys to move the
-                                selection.
-                                Select the resize handle with enter and use the arrow keys to resize the
-                                selection.
-                                Press <Kbd>esc</Kbd> or click &quot;Disable Keyboard Selection&quot; to exit keyboard selection mode.
+                                Select the move handle with enter and use the arrow keys to move the selection. Select
+                                the resize handle with enter and use the arrow keys to resize the selection. Press{' '}
+                                <Kbd>esc</Kbd> or click &quot;Disable Keyboard Selection&quot; to exit keyboard
+                                selection mode.
                             </Text>
                         </Stack>
                     </Collapse>
@@ -418,9 +422,9 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                     </Box>
                     <Image
                         src={imageURL}
-                        imageRef={imageRef}
                         alt="Graph Image"
                         className={classes.image}
+                        onLoad={handleImageLoad}
                         fit="contain"
                     />
                 </Container>

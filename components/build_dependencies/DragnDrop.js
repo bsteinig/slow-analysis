@@ -7,7 +7,7 @@ const useStyles = createStyles((theme) => ({
     card: {
         minWidth: 200,
         width: 200,
-        height: 200,
+        height: 225     ,
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
         margin: theme.spacing.md,
         boxShadow: theme.shadows.sm,

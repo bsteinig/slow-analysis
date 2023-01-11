@@ -68,11 +68,15 @@ const useStyles = createStyles((theme) => ({
 /*
     This component is responsible for displaying the image that the user has uploaded.
     It is a child component of the Build component.
-    imageURL: string
-    selection: active: boolean, x: number, y: number, width: number, height: number
-    setSelection: function
 */
-function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSelectionReset, keyboardEnabled, toggleKeyboard }) {
+function ImageViewer({
+    imageURL,
+    selection,
+    setSelection,
+    selectionReset,
+    setSelectionReset,
+    keyboardEnabled,
+}) {
     const { classes, theme } = useStyles();
 
     // Get intrinsic image size and calculate aspect ratio
@@ -86,7 +90,12 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         });
     };
 
-    // Selection state
+    // Lock,View, and Stats state
+    const [locked, toggleLock] = useToggle();
+    const [view, toggleView] = useToggle();
+    const [collapsed, toggleCollapsed] = useToggle();
+
+    // Mouse Selection state
     const [startValue, setStartValue] = useState({ x: 0, y: 0 });
     const [value, setValue] = useState({ x: 0, y: 0 });
     const { ref: sizeRef, width, height } = useElementSize();
@@ -100,30 +109,38 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         startY: 0.05,
         endX: 0.15,
         endY: 0.15,
-        active: false,
     });
+    // These contorl whether one of the resizing methods is active
     const [keyboardMove, toggleKeyboardMove] = useToggle();
     const [keyboardResize, toggleKeyboardResize] = useToggle();
+    // This is the component specific control for whether a selection is active
     const [keyboardActive, toggleKeyboardActive] = useToggle();
+    const toggleKeyboardSelection = () => {
+        if(keyboardActive){
+            setSelection({
+                startX: keyboardSelection.startX,
+                startY: keyboardSelection.startY,
+                endX: keyboardSelection.endX,
+                endY: keyboardSelection.endY,
+                active: true 
+            });
+        }else{
+            setSelection({
+                startX: keyboardSelection.startX,
+                startY: keyboardSelection.startY,
+                endX: keyboardSelection.endX,
+                endY: keyboardSelection.endY,
+                active: false 
+            });
+        }
+        toggleKeyboardActive();
+    }
+
 
     const focusTrapRef = useFocusTrap(keyboardActive);
 
-    // keyboard selection esc key handler
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape') {
-                toggleKeyboardActive();
-            }
-        };
-        if (keyboardActive) {
-            window.addEventListener('keydown', handleKeyDown);
-        }
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [keyboardActive]);
-
-    // Keyboard Move handler
+    //SECTION Keyboard Selection Handlers
+    //NOTE: Keyboard Move handler
     // When keyboardMove becomes true create an event listener for arrow key presses and move the selection box accordingly
     // When keyboardMove becomes false remove the event listener and update selection
     useEffect(() => {
@@ -173,7 +190,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         } else {
             if (keyboardEnabled) {
                 setSelection({
-                    active: true,
                     startX: keyboardSelection.startX,
                     startY: keyboardSelection.startY,
                     endX: keyboardSelection.endX,
@@ -183,7 +199,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         }
     }, [keyboardMove]);
 
-    // Keyboard Resize handler
+    //NOTE: Keyboard Resize handler
     // When keyboardResize becomes true create an event listener for arrow key presses and resize the selection box accordingly
     // When keyboardResize becomes false remove the event listener and update selection
     useEffect(() => {
@@ -229,7 +245,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
         } else {
             if (keyboardEnabled) {
                 setSelection({
-                    active: true,
                     startX: keyboardSelection.startX,
                     startY: keyboardSelection.startY,
                     endX: keyboardSelection.endX,
@@ -238,13 +253,9 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             }
         }
     }, [keyboardResize]);
+    //!SECTION
 
-    // Lock,View, and Stats state
-    const [locked, toggleLock] = useToggle();
-    const [view, toggleView] = useToggle();
-    const [collapsed, toggleCollapsed] = useToggle();
-
-    // Mouse selection
+    //SECTION Mouse selection
     useEffect(() => {
         if (!keyboardEnabled && !locked) {
             if (active) {
@@ -270,7 +281,9 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             }
         }
     }, [active]);
+    //!SECTION
 
+    // SECTION: Selection reset handlers for both keyboard and mouse
     const resetSelection = () => {
         setSelection({ startX: 0, startY: 0, endX: 0, endY: 0, active: false });
         if (keyboardEnabled) {
@@ -279,7 +292,6 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                 startY: 0.05,
                 endX: 0.15,
                 endY: 0.15,
-                active: true,
             });
         } else {
             setStartValue({ x: 0, y: 0 });
@@ -296,6 +308,7 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
             setSelectionReset(false);
         }
     }, [selectionReset]);
+    //!SECTION
 
     return (
         <Grid.Col md={7} lg={8}>
@@ -304,11 +317,13 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                     <Collapse in={keyboardEnabled}>
                         <Stack spacing="xs">
                             <Text size="sm" color="dimmed">
-                                Select the move handle with enter and use the arrow keys to move the selection. Select
-                                the resize handle with enter and use the arrow keys to resize the selection. Press{' '}
-                                <Kbd>esc</Kbd> or click &quot;Disable Keyboard Selection&quot; to exit keyboard
-                                selection mode.
+                                Select the move or resize handle with enter and use the arrow keys to manipulate the
+                                selection. Select the resize handle with enter and use the arrow keys to resize the
+                                selection.
                             </Text>
+                            <Button size="sm" onClick={() => toggleKeyboardSelection()} variant="secondary">
+                                {keyboardActive ? 'End Selection' : 'Begin Selection'}
+                            </Button>
                         </Stack>
                     </Collapse>
                 </Stack>
@@ -354,14 +369,16 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                                     justifyContent: 'flex-end',
                                 }}
                             >
-                                <Group noWrap position="apart">
-                                    <ActionIcon p={0} onClick={() => toggleKeyboardMove()}>
-                                        <IconArrowsMove size={20} color={view ? 'none' : 'white'} />
-                                    </ActionIcon>
-                                    <ActionIcon p={0} onClick={() => toggleKeyboardResize()}>
-                                        <IconSlashes size={20} color={view ? 'none' : 'white'} />
-                                    </ActionIcon>
-                                </Group>
+                                {keyboardActive && (
+                                    <Group noWrap position="apart">
+                                        <ActionIcon p={0} onClick={() => toggleKeyboardMove()}>
+                                            <IconArrowsMove size={20} color={view ? 'none' : 'white'} />
+                                        </ActionIcon>
+                                        <ActionIcon p={0} onClick={() => toggleKeyboardResize()}>
+                                            <IconSlashes size={20} color={view ? 'none' : 'white'} />
+                                        </ActionIcon>
+                                    </Group>
+                                )}
                             </div>
                         ) : (
                             <div
@@ -466,9 +483,11 @@ function ImageViewer({ imageURL, selection, setSelection, selectionReset, setSel
                             <Badge color="green" radius="md">
                                 {view ? 'Full Image' : 'Selection View'}
                             </Badge>
-                            <Badge color="orange" radius="md">
-                                {locked ? 'Selection Locked' : 'Selection Unlocked'}
-                            </Badge>
+                            {!keyboardEnabled && (
+                                <Badge color="orange" radius="md">
+                                    {locked ? 'Selection Locked' : 'Selection Unlocked'}
+                                </Badge>
+                            )}
                         </Group>
                     </Group>
                 </Stack>

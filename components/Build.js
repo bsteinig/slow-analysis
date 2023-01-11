@@ -12,7 +12,7 @@ import {
     Title,
     Tooltip,
 } from '@mantine/core';
-import { useListState, useLocalStorage, useSessionStorage, useToggle } from '@mantine/hooks';
+import { useListState, useSessionStorage, useToggle } from '@mantine/hooks';
 import { IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
@@ -31,8 +31,6 @@ const useStyles = createStyles((theme) => ({
 
 function Build({ setComponent, setProject }) {
     const { classes } = useStyles();
-
-    // FIXME: This would be a lot better if the state was managed in a single place, but the data is usually small so it's not a big deal
 
     // Image state
     const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });

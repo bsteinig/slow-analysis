@@ -44,6 +44,7 @@ function Build({ setComponent, setProject }) {
     // Slides state
     const [storeSlides, setStoreSlides] = useSessionStorage({ key: 'slides', defaultValue: [] });
     const [slides, handlers] = useListState([]);
+    const [isEditing, setIsEditing] = useState(-1);
 
     // Form state
     const [formSubmission, setFormSubmission] = useState({});
@@ -77,13 +78,21 @@ function Build({ setComponent, setProject }) {
         console.log('formSubmission', formSubmission);
         if (selection.active && Object.keys(formSubmission).length > 0) {
             // We have received a form submission and a selection is active
+            if (isEditing !== -1) {
+                // We are editing a slide
+                handlers.setItemProp(isEditing, 'selection', selection);
+                handlers.setItemProp(isEditing, 'data', formSubmission);
+                setIsEditing(-1);
+            } else {
             // We need to create a new slide
-            const newSlide = {
-                id: slides.length,
-                selection: selection,
-                data: formSubmission,
-            };
-            handlers.append(newSlide);
+                const newSlide = {
+                    id: slides.length,
+                    selection: selection,
+                    data: formSubmission,
+                };
+                handlers.append(newSlide);
+                
+            }
             setSelectionReset(true);
             setFormSubmission({});
         }
@@ -112,6 +121,18 @@ function Build({ setComponent, setProject }) {
             slides: slides,
         });
     }, [imageURL, title, slides]);
+
+    // Edit slide handler
+    const handleEditSlide = (slide) => {
+        if(isEditing === -1){
+            setIsEditing(slide);
+            setSelection(slides[slide].selection);
+        }else{
+            // Cancel Editing
+            setIsEditing(-1);
+            setSelectionReset(true);
+        }
+    };
 
     return (
         <>
@@ -242,9 +263,10 @@ function Build({ setComponent, setProject }) {
                             setSelectionReset={setSelectionReset}
                             keyboardEnabled={keyboardEnabled}
                             toggleKeyboard={toggleKeyboard}
+                            isEditing={isEditing}
                         />
-                        <CardForm selection={selection} setFormSubmission={setFormSubmission} />
-                        <DragnDrop slides={slides} handlers={handlers} />
+                        <CardForm selection={selection} setFormSubmission={setFormSubmission} isEditing={isEditing} slides={slides} />
+                        <DragnDrop slides={slides} handlers={handlers} handleEditSlide={handleEditSlide} isEditing={isEditing} />
                     </Grid>
                 ) : (
                     <Form setImageURL={setImageURL} setSubmitted={setSubmitted} setTitle={setTitle} />

@@ -16,6 +16,7 @@ import {
     Space,
     Stack,
     Text,
+    Title,
     Tooltip,
 } from '@mantine/core';
 import { useElementSize, useFocusTrap, useMergedRef, useMouse, useMove, useToggle } from '@mantine/hooks';
@@ -76,6 +77,7 @@ function ImageViewer({
     selectionReset,
     setSelectionReset,
     keyboardEnabled,
+    isEditing,
 }) {
     const { classes, theme } = useStyles();
 
@@ -281,6 +283,13 @@ function ImageViewer({
             }
         }
     }, [active]);
+
+    useEffect(() => {
+        if (isEditing !== -1){
+            setStartValue({x: selection.startX, y: selection.startY})
+            setValue({x: selection.endX, y: selection.endY})
+        }
+    }, [isEditing]);
     //!SECTION
 
     // SECTION: Selection reset handlers for both keyboard and mouse
@@ -314,6 +323,7 @@ function ImageViewer({
         <Grid.Col md={7} lg={8}>
             <Paper withBorder radius="md" p="md" className={classes.root} ref={focusTrapRef}>
                 <Stack spacing="xs" mb={15}>
+                    <Title order={3} >{isEditing !== -1 ? `Editing Slide: ${isEditing}` : 'Create a New Slide'}</Title>
                     <Collapse in={keyboardEnabled}>
                         <Stack spacing="xs">
                             <Text size="sm" color="dimmed">

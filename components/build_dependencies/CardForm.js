@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAugmentedReality } from '@tabler/icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -39,7 +39,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function CardForm({ selection, setFormSubmission }) {
+function CardForm({ selection, setFormSubmission, isEditing, slides }) {
     const { classes } = useStyles();
 
     const customLoader = (
@@ -71,6 +71,19 @@ function CardForm({ selection, setFormSubmission }) {
             alert('Save Failed. Please make a selection on the image to the left.')
         }
     };
+
+    useEffect(() => {
+      if(isEditing !== -1){
+        componentForm.setValues({
+          graphicalFeature: slides[isEditing].data.graphicalFeature,
+          description: slides[isEditing].data.description,
+        })
+      }
+      if(isEditing === -1){
+        componentForm.reset();
+      }
+    }, [isEditing])
+    
 
     return (
         <Grid.Col md={5} lg={4}>

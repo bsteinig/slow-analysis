@@ -371,11 +371,11 @@ function ImageViewer({
                             >
                                 {keyboardActive && (
                                     <Group noWrap position="apart">
-                                        <ActionIcon p={0} onClick={() => toggleKeyboardMove()}>
-                                            <IconArrowsMove size={20} color={view ? 'none' : 'white'} />
+                                        <ActionIcon p={0} color="blue" onClick={() => toggleKeyboardMove()}>
+                                            <IconArrowsMove size={20} color={view ? 'none' : 'black'} />
                                         </ActionIcon>
-                                        <ActionIcon p={0} onClick={() => toggleKeyboardResize()}>
-                                            <IconSlashes size={20} color={view ? 'none' : 'white'} />
+                                        <ActionIcon p={0} color="blue" onClick={() => toggleKeyboardResize()}>
+                                            <IconSlashes size={20} color={view ? 'none' : 'black'} />
                                         </ActionIcon>
                                     </Group>
                                 )}

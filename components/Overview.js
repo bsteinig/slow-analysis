@@ -64,56 +64,39 @@ function Overview() {
                 </Stack>
                 <Paper p='md' radius='md'  className={classes.section}>
                     <Timeline active={1} bulletSize={24} lineWidth={2}>
-                        <Timeline.Item bullet={<IconGitBranch size={12} />} title="New branch">
+                        <Timeline.Item bullet={<IconGitBranch size={12} />} title="New Project">
                             <Text color="dimmed" size="sm">
-                                You&apos;ve created new branch{' '}
+                                Create a new project on the {' '}
                                 <Text variant="link" component="span" inherit>
-                                    fix-notifications
+                                    build page
                                 </Text>{' '}
-                                from master
-                            </Text>
-                            <Text size="xs" mt={4}>
-                                2 hours ago
+                                by uploading an image
                             </Text>
                         </Timeline.Item>
 
-                        <Timeline.Item bullet={<IconGitCommit size={12} />} title="Commits">
+                        <Timeline.Item bullet={<IconGitCommit size={12} />} title="Make Slides">
                             <Text color="dimmed" size="sm">
-                                You&apos;ve pushed 23 commits to
-                                <Text variant="link" component="span" inherit>
-                                    fix-notifications branch
-                                </Text>
-                            </Text>
-                            <Text size="xs" mt={4}>
-                                52 minutes ago
+                                Create new slides, by click and draggin on the image to make a selection. You can also use your keyboard to make selections.
                             </Text>
                         </Timeline.Item>
 
                         <Timeline.Item
-                            title="Pull request"
+                            title="Reorder Slides"
                             bullet={<IconGitPullRequest size={12} />}
                             lineVariant="dashed"
                         >
                             <Text color="dimmed" size="sm">
-                                You&apos;ve submitted a pull request
-                                <Text variant="link" component="span" inherit>
-                                    Fix incorrect notification message (#187)
-                                </Text>
-                            </Text>
-                            <Text size="xs" mt={4}>
-                                34 minutes ago
+                                Move slides left and right to adjust their order in the presentation by clicking and dragging the slide. or by using the arrow keys.
                             </Text>
                         </Timeline.Item>
 
-                        <Timeline.Item title="Code review" bullet={<IconMessageDots size={12} />}>
+                        <Timeline.Item title="Review Project" bullet={<IconMessageDots size={12} />}>
                             <Text color="dimmed" size="sm">
+                                Check out a preview of your project on the {' '}
                                 <Text variant="link" component="span" inherit>
-                                    Robert Gluesticker
+                                    preview page
                                 </Text>{' '}
-                                left a code review on your pull request
-                            </Text>
-                            <Text size="xs" mt={4}>
-                                12 minutes ago
+                                and download the as an HTML file.
                             </Text>
                         </Timeline.Item>
                     </Timeline>

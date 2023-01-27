@@ -2,10 +2,12 @@ import {
     Anchor,
     Button,
     Center,
+    Code,
     Collapse,
     Container,
     createStyles,
     Group,
+    Modal,
     Paper,
     Skeleton,
     Stack,
@@ -17,7 +19,9 @@ import {
 import { IconAppWindow, IconBrowser, IconSourceCode } from '@tabler/icons';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
+import { Prism } from '@mantine/prism';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -43,95 +47,211 @@ const useStyles = createStyles((theme) => ({
     },
     toolbar: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : 'white',
-    }
+    },
 }));
 
 function Preview({ setComponent, project }) {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 
+    const [openHTML, setOpenHTML] = useState(false);
     const [showSource, setShowSource] = useState(false);
+    const [component, setIndex] = useState('');
+
+    const index = `<html>
+        <head>
+          <meta charset="utf-8" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <title>{sitetitle}</title>
+          <meta name="description" content="" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn@0.1.0/style.css" />
+        </head>
+        <body>
+          <div class="container">
+            <div class="img-comp">
+              <div class="img-comp-highlight" id="img-comp-highlight">
+                <div id="img-comp-mask"></div>
+              </div>
+              <img
+                src="{imageURL}"
+                alt="graphic"
+                class="responsive"
+                id="img-comp-img"
+              />
+            </div>
+            <div class="info-comp">
+              <h1 class="headline">
+                  {title}
+              </h1>
+              <h3 class="comp-title" id="comp-title">Click Next to begin</h3>
+              <h5 class="comp-info" id="comp-info"></h5>
+              <div class="btn-group">
+                  <button class="btn" onclick="backClick()">Back</button>
+                  <button class="btn" onclick="nextClick()">Next</button>
+                </div>
+            </div>
+          </div>
+          <script src="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn@0.1.0/script.js" async defer></script>
+          <div id="aspect" style="display: none;">{aspect}</div>
+          <div id="titles" style="display: none;">{GraphArea}</div>
+          <div id="descs" style="display: none;">{descriptions}</div>
+          <div id="coords" style="display: none;">{coords}</div>
+        </body>
+      </html>`;
+
+    // Function to generate the HTML preview
+    // Fill content in index.html with the project data
+    const generateHTML = (project) => {
+        // replace {sitetitle} and {title} with project title
+        let html = index.replace(/{title}/g, project.title);
+        html = html.replace(/{sitetitle}/g, project.title);
+        // replace {imageURL} with project image
+        html = html.replace(/{imageURL}/g, project.image);
+        // replace {aspect} with project aspect ratio
+        html = html.replace(/{aspect}/g, project.aspect);
+        // For each graph area, replace {GraphArea} with the graph area title
+        let graphArea = '';
+        let descriptions = '';
+        let coords = '';
+        project.slides.forEach((slide, index) => {
+            // if last slide, don't add a pipe
+            if (index === project.slides.length - 1) {
+                graphArea += slide.data.graphicalFeature;
+                descriptions += slide.data.description ? slide.data.description : ' ';
+                coords +=
+                    slide.selection.startX +
+                    ',' +
+                    slide.selection.startY +
+                    ',' +
+                    slide.selection.endX +
+                    ',' +
+                    slide.selection.endY;
+            } else {
+                graphArea += slide.data.graphicalFeature + '||';
+                descriptions += slide.data.description ? slide.data.description + '||' : ' ||';
+                coords +=
+                    slide.selection.startX +
+                    ',' +
+                    slide.selection.startY +
+                    ',' +
+                    slide.selection.endX +
+                    ',' +
+                    slide.selection.endY +
+                    '||';
+            }
+        });
+        html = html.replace(/{GraphArea}/g, graphArea);
+        html = html.replace(/{descriptions}/g, descriptions);
+        html = html.replace(/{coords}/g, coords);
+        setIndex(html);
+    };
+
+    useEffect(() => {
+        generateHTML(project);
+    }, [project]);
 
     return (
-        <Paper shadow="md" p="md" radius="lg" mt={20} className={classes.root}>
-            <Stack spacing={0}>
-                <Stack align="flex-start" justify="flex-start" spacing={0} mb={10} pl={20}>
-                    <Title className={classes.title}>Preview</Title>
-                    <Text size="sm" color="dimmed">
-                        Your project output will be displayed here.{' '}
-                        <Anchor component="button" type="button" onClick={() => setComponent('build')}>
-                            Start building
-                        </Anchor>{' '}
-                        to get started.
-                    </Text>
-                </Stack>
-                <Container my={10} className={classes.output}>
-                    <Skeleton animate={false} height={400} width="50%" />
-                    <div style={{ width: '45%' }}>
-                        <Center style={{ flexDirection: 'column' }}>
-                            <Skeleton animate={false} height={28} mb={24} width="80%" radius="xl" />
-                            <Skeleton animate={false} height={20} mb={16} width="50%" radius="xl" />
-                        </Center>
-                        {[...Array(9)].map((x, i) => (
-                            <Skeleton
-                                key={i}
-                                animate={false}
-                                height={12}
-                                mb={i == 8 ? 48 : 8}
-                                width={i == 8 ? '60%' : '100%'}
-                                radius="xl"
-                            />
-                        ))}
-                        <Group position="center">
-                            <Skeleton animate={false} height={30} mr={10} mb={8} width="30%" radius="xl" />
-                            <Skeleton animate={false} height={30} ml={10} mb={8} width="30%" radius="xl" />
-                        </Group>
-                    </div>
-                </Container>
-                <Paper shadow="md" p="md" radius="lg" mt={20} mx={20} className={classes.toolbar}>
-                    <Stack direction="row" align="flex-start" justify="space-between" spacing="md">
-                        <Text size="md" weight={500}>
-                            Choose an export option below to save your project, or view the source code.
+        <>
+            <Modal opened={openHTML} onClose={() => setOpenHTML(false)} title="Source Code" size="xl" zIndex={1000}>
+                <Text size="sm" color="dimmed">
+                    Copy and paste this code into your website to embed your project.
+                </Text>
+                <Prism language="html">{component}</Prism>
+            </Modal>
+            <Paper shadow="md" p="md" radius="lg" mt={20} className={classes.root}>
+                <Stack spacing={0}>
+                    <Stack align="flex-start" justify="flex-start" spacing={0} mb={10} pl={20}>
+                        <Title className={classes.title}>Preview</Title>
+                        <Text size="sm" color="dimmed">
+                            Your project output will be displayed here.{' '}
+                            <Anchor component="button" type="button" onClick={() => setComponent('build')}>
+                                Start building
+                            </Anchor>{' '}
+                            to get started.
                         </Text>
-                        <Group>
-                            <Tooltip
-                                multiline
-                                width={220}
-                                withArrow
-                                transition="fade"
-                                transitionDuration={200}
-                                label="Use this option to create an HTML file that you can embed in your website. This option is recommended if you want to use your project in a website."
-                                events={{ hover: true, focus: true, touch: false }}
-                            >
-                                <Button leftIcon={<IconBrowser size={24} />} radius="md">Copy HTML Embed</Button>
-                            </Tooltip>
-                            <Tooltip
-                                multiline
-                                width={220}
-                                withArrow
-                                transition="fade"
-                                transitionDuration={200}
-                                label="Use this option to create an HTML file that you can use to create a standalone application. This option is recommended if you want to use your project offline."
-                                events={{ hover: true, focus: true, touch: false }}
-                            >
-                                <Button leftIcon={<IconAppWindow size={24} />} radius="md">Copy HTML Canvas</Button>
-                            </Tooltip>
-                            <Button leftIcon={<IconSourceCode size={24} />} color="teal" radius="md" onClick={() => setShowSource(!showSource)}>
-                                View Source Code
-                            </Button>
-                        </Group>
                     </Stack>
-                </Paper>
-                <Collapse in={showSource} transitionDuration={200}>
-                <DynamicReactJson
-                    src={project}
-                    iconStyle="triangle"
-                    theme={theme.colorScheme === 'dark' ? 'summerfruit' : 'summerfruit:inverted'}
-                    style={{ padding: '30px 40px', marginLeft: 20, marginRight: 20, backgroundColor: 'none' }}
-                />
-                </Collapse>
-            </Stack>
-        </Paper>
+                    <Container my={10} className={classes.output}>
+                        <Skeleton animate={false} height={400} width="50%" />
+                        <div style={{ width: '45%' }}>
+                            <Center style={{ flexDirection: 'column' }}>
+                                <Skeleton animate={false} height={28} mb={24} width="80%" radius="xl" />
+                                <Skeleton animate={false} height={20} mb={16} width="50%" radius="xl" />
+                            </Center>
+                            {[...Array(9)].map((x, i) => (
+                                <Skeleton
+                                    key={i}
+                                    animate={false}
+                                    height={12}
+                                    mb={i == 8 ? 48 : 8}
+                                    width={i == 8 ? '60%' : '100%'}
+                                    radius="xl"
+                                />
+                            ))}
+                            <Group position="center">
+                                <Skeleton animate={false} height={30} mr={10} mb={8} width="30%" radius="xl" />
+                                <Skeleton animate={false} height={30} ml={10} mb={8} width="30%" radius="xl" />
+                            </Group>
+                        </div>
+                    </Container>
+                    <Paper shadow="md" p="md" radius="lg" mt={20} mx={20} className={classes.toolbar}>
+                        <Stack direction="row" align="flex-start" justify="space-between" spacing="md">
+                            <Text size="md" weight={500}>
+                                Choose an export option below to save your project, or view the source code.
+                            </Text>
+                            <Group>
+                                <Tooltip
+                                    multiline
+                                    width={220}
+                                    withArrow
+                                    transition="fade"
+                                    transitionDuration={200}
+                                    label="Use this option to create an HTML file that you can embed in your website. This option is recommended if you want to use your project in a website."
+                                    events={{ hover: true, focus: true, touch: false }}
+                                >
+                                    <Button
+                                        leftIcon={<IconBrowser size={24} />}
+                                        onClick={() => setOpenHTML(true)}
+                                        radius="md"
+                                    >
+                                        Copy HTML Embed
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip
+                                    multiline
+                                    width={220}
+                                    withArrow
+                                    transition="fade"
+                                    transitionDuration={200}
+                                    label="Use this option to create an HTML file that you can use to create a standalone application. This option is recommended if you want to use your project offline."
+                                    events={{ hover: true, focus: true, touch: false }}
+                                >
+                                    <Button leftIcon={<IconAppWindow size={24} />} radius="md">
+                                        Copy HTML Canvas
+                                    </Button>
+                                </Tooltip>
+                                <Button
+                                    leftIcon={<IconSourceCode size={24} />}
+                                    color="teal"
+                                    radius="md"
+                                    onClick={() => setShowSource(!showSource)}
+                                >
+                                    View Source Code
+                                </Button>
+                            </Group>
+                        </Stack>
+                    </Paper>
+                    <Collapse in={showSource} transitionDuration={200}>
+                        <DynamicReactJson
+                            src={project}
+                            iconStyle="triangle"
+                            theme={theme.colorScheme === 'dark' ? 'summerfruit' : 'summerfruit:inverted'}
+                            style={{ padding: '30px 40px', marginLeft: 20, marginRight: 20, backgroundColor: 'none' }}
+                        />
+                    </Collapse>
+                </Stack>
+            </Paper>
+        </>
     );
 }
 

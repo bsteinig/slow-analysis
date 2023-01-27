@@ -78,6 +78,7 @@ function ImageViewer({
     setSelectionReset,
     keyboardEnabled,
     isEditing,
+    setAspectRatio,
 }) {
     const { classes, theme } = useStyles();
 
@@ -90,6 +91,7 @@ function ImageViewer({
             height: e.target.naturalHeight,
             aspectRatio: e.target.naturalWidth / e.target.naturalHeight,
         });
+        setAspectRatio(e.target.naturalWidth / e.target.naturalHeight);
     };
 
     // Lock,View, and Stats state

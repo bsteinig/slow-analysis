@@ -36,6 +36,7 @@ function Build({ setComponent, setProject }) {
     const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });
     const [imageURL, setImageURL] = useSessionStorage({ key: 'image-url', defaultValue: '' });
     const [title, setTitle] = useSessionStorage({ key: 'image-title', defaultValue: '' });
+    const [aspectRatio, setAspectRatio] = useState(1.5);
 
     // Selection state
     const [selection, setSelection] = useState({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
@@ -117,10 +118,11 @@ function Build({ setComponent, setProject }) {
     useEffect(() => {
         setProject({
             image: imageURL,
+            aspect: aspectRatio,
             title: title,
             slides: slides,
         });
-    }, [imageURL, title, slides]);
+    }, [imageURL, title, slides, aspectRatio]);
 
     // Edit slide handler
     const handleEditSlide = (slide) => {
@@ -264,6 +266,7 @@ function Build({ setComponent, setProject }) {
                             keyboardEnabled={keyboardEnabled}
                             toggleKeyboard={toggleKeyboard}
                             isEditing={isEditing}
+                            setAspectRatio={setAspectRatio}
                         />
                         <CardForm selection={selection} setFormSubmission={setFormSubmission} isEditing={isEditing} slides={slides} />
                         <DragnDrop slides={slides} handlers={handlers} handleEditSlide={handleEditSlide} isEditing={isEditing} />

@@ -48,6 +48,12 @@ const useStyles = createStyles((theme) => ({
     toolbar: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : 'white',
     },
+    frame: {
+        width: '100%',
+        height: '500px',
+        border: 'none',
+        paddingTop: '50px'
+    }
 }));
 
 function Preview({ setComponent, project }) {
@@ -65,14 +71,12 @@ function Preview({ setComponent, project }) {
           <title>{sitetitle}</title>
           <meta name="description" content="" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn@0.1.0/style.css" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn/style.css" />
         </head>
         <body>
           <div class="container">
             <div class="img-comp">
-              <div class="img-comp-highlight" id="img-comp-highlight">
-                <div id="img-comp-mask"></div>
-              </div>
+              <div class="img-comp-highlight" id="img-comp-highlight"></div>
               <img
                 src="{imageURL}"
                 alt="graphic"
@@ -84,15 +88,17 @@ function Preview({ setComponent, project }) {
               <h1 class="headline">
                   {title}
               </h1>
-              <h3 class="comp-title" id="comp-title">Click Next to begin</h3>
-              <h5 class="comp-info" id="comp-info"></h5>
+              <div class="text-container">
+                <h3 class="comp-title" id="comp-title">Click Next to begin</h3>
+                <p class="comp-info" id="comp-info"></p>
+              </div>
               <div class="btn-group">
                   <button class="btn" onclick="backClick()">Back</button>
                   <button class="btn" onclick="nextClick()">Next</button>
                 </div>
             </div>
           </div>
-          <script src="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn@0.1.0/script.js" async defer></script>
+          <script src="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn/script.js" async defer></script>
           <div id="aspect" style="display: none;">{aspect}</div>
           <div id="titles" style="display: none;">{GraphArea}</div>
           <div id="descs" style="display: none;">{descriptions}</div>
@@ -172,27 +178,33 @@ function Preview({ setComponent, project }) {
                         </Text>
                     </Stack>
                     <Container my={10} className={classes.output}>
-                        <Skeleton animate={false} height={400} width="50%" />
-                        <div style={{ width: '45%' }}>
-                            <Center style={{ flexDirection: 'column' }}>
-                                <Skeleton animate={false} height={28} mb={24} width="80%" radius="xl" />
-                                <Skeleton animate={false} height={20} mb={16} width="50%" radius="xl" />
-                            </Center>
-                            {[...Array(9)].map((x, i) => (
-                                <Skeleton
-                                    key={i}
-                                    animate={false}
-                                    height={12}
-                                    mb={i == 8 ? 48 : 8}
-                                    width={i == 8 ? '60%' : '100%'}
-                                    radius="xl"
-                                />
-                            ))}
-                            <Group position="center">
-                                <Skeleton animate={false} height={30} mr={10} mb={8} width="30%" radius="xl" />
-                                <Skeleton animate={false} height={30} ml={10} mb={8} width="30%" radius="xl" />
-                            </Group>
-                        </div>
+                        {component === '' ? (
+                            <>
+                                <Skeleton animate={false} height={400} width="50%" />
+                                <div style={{ width: '45%' }}>
+                                    <Center style={{ flexDirection: 'column' }}>
+                                        <Skeleton animate={false} height={28} mb={24} width="80%" radius="xl" />
+                                        <Skeleton animate={false} height={20} mb={16} width="50%" radius="xl" />
+                                    </Center>
+                                    {[...Array(9)].map((x, i) => (
+                                        <Skeleton
+                                            key={i}
+                                            animate={false}
+                                            height={12}
+                                            mb={i == 8 ? 48 : 8}
+                                            width={i == 8 ? '60%' : '100%'}
+                                            radius="xl"
+                                        />
+                                    ))}
+                                    <Group position="center">
+                                        <Skeleton animate={false} height={30} mr={10} mb={8} width="30%" radius="xl" />
+                                        <Skeleton animate={false} height={30} ml={10} mb={8} width="30%" radius="xl" />
+                                    </Group>
+                                </div>
+                            </>
+                        ) : (
+                            <iframe width="100%" height="400px" srcDoc={component} className={classes.frame}></iframe>
+                        )}
                     </Container>
                     <Paper shadow="md" p="md" radius="lg" mt={20} mx={20} className={classes.toolbar}>
                         <Stack direction="row" align="flex-start" justify="space-between" spacing="md">

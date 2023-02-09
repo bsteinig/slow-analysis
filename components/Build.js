@@ -85,14 +85,13 @@ function Build({ setComponent, setProject }) {
                 handlers.setItemProp(isEditing, 'data', formSubmission);
                 setIsEditing(-1);
             } else {
-            // We need to create a new slide
+                // We need to create a new slide
                 const newSlide = {
                     id: slides.length,
                     selection: selection,
                     data: formSubmission,
                 };
                 handlers.append(newSlide);
-                
             }
             setSelectionReset(true);
             setFormSubmission({});
@@ -126,10 +125,12 @@ function Build({ setComponent, setProject }) {
 
     // Edit slide handler
     const handleEditSlide = (slide) => {
-        if(isEditing === -1){
+        if (isEditing === -1) {
             setIsEditing(slide);
-            setSelection(slides[slide].selection);
-        }else{
+            if (slide != -1) {
+                setSelection(slides[slide].selection);
+            }
+        } else {
             // Cancel Editing
             setIsEditing(-1);
             setSelectionReset(true);
@@ -175,12 +176,7 @@ function Build({ setComponent, setProject }) {
                 </Group>
             </Modal>
             <Modal opened={settingsOpened} onClose={() => setSettingsOpened(false)} title="Settings" zIndex={1000}>
-                <Button
-                    variant="light"
-                    radius="md"
-                    style={{ width: 'fit-content' }}
-                    onClick={() => toggleKeyboard()}
-                >
+                <Button variant="light" radius="md" style={{ width: 'fit-content' }} onClick={() => toggleKeyboard()}>
                     {keyboardEnabled ? 'Disable' : 'Enable'} Keyboard Selection
                 </Button>
                 <Group position="center" mt={20}>
@@ -268,8 +264,18 @@ function Build({ setComponent, setProject }) {
                             isEditing={isEditing}
                             setAspectRatio={setAspectRatio}
                         />
-                        <CardForm selection={selection} setFormSubmission={setFormSubmission} isEditing={isEditing} slides={slides} />
-                        <DragnDrop slides={slides} handlers={handlers} handleEditSlide={handleEditSlide} isEditing={isEditing} />
+                        <CardForm
+                            selection={selection}
+                            setFormSubmission={setFormSubmission}
+                            isEditing={isEditing}
+                            slides={slides}
+                        />
+                        <DragnDrop
+                            slides={slides}
+                            handlers={handlers}
+                            handleEditSlide={handleEditSlide}
+                            isEditing={isEditing}
+                        />
                     </Grid>
                 ) : (
                     <Form setImageURL={setImageURL} setSubmitted={setSubmitted} setTitle={setTitle} />

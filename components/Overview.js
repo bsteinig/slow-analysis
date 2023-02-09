@@ -69,7 +69,7 @@ function Overview({ setComponent }) {
                             width="560"
                             height="315"
                             className={classes.video}
-                            src="https://www.youtube-nocookie.com/embed/xuCn8ux2gbs"
+                            src="https://www.youtube-nocookie.com/embed/usImb5pPOgY"
                             title="YouTube video player"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

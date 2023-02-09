@@ -1,5 +1,16 @@
 import { createStyles, Flex, Group, Paper, Space, Stack, Text, Timeline, Title } from '@mantine/core';
-import { IconGitBranch, IconGitCommit, IconGitPullRequest, IconMessageDots } from '@tabler/icons';
+import {
+    IconArrowsSort,
+    IconEdit,
+    IconFilePlus,
+    IconGitBranch,
+    IconGitCommit,
+    IconGitPullRequest,
+    IconMessageDots,
+    IconSlideshow,
+    IconTrash,
+} from '@tabler/icons';
+import Link from 'next/link';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({
@@ -30,9 +41,13 @@ const useStyles = createStyles((theme) => ({
             width: '100%',
         },
     },
+    timelineTitle: {
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[9],
+        fontWeight: 600,
+    },
 }));
 
-function Overview() {
+function Overview({ setComponent }) {
     const { classes } = useStyles();
 
     return (
@@ -62,41 +77,74 @@ function Overview() {
                         />
                     </div>
                 </Stack>
-                <Paper p='md' radius='md'  className={classes.section}>
-                    <Timeline active={1} bulletSize={24} lineWidth={2}>
-                        <Timeline.Item bullet={<IconGitBranch size={12} />} title="New Project">
+                <Paper p="md" radius="md" className={classes.section}>
+                    <Timeline active={5} bulletSize={30} lineWidth={6}>
+                        <Timeline.Item
+                            bullet={<IconFilePlus size={20} />}
+                            title={<Text className={classes.timelineTitle}>New Project</Text>}
+                        >
                             <Text color="dimmed" size="sm">
-                                Create a new project on the {' '}
-                                <Text variant="link" component="span" inherit>
+                                Create a new project on the&nbsp;
+                                <Text variant="link" component="span" onClick={() => setComponent('build')} inherit>
                                     build page
                                 </Text>{' '}
-                                by uploading an image
-                            </Text>
-                        </Timeline.Item>
-
-                        <Timeline.Item bullet={<IconGitCommit size={12} />} title="Make Slides">
-                            <Text color="dimmed" size="sm">
-                                Create new slides, by click and draggin on the image to make a selection. You can also use your keyboard to make selections.
+                                by uploading an image and following the setup directions.
                             </Text>
                         </Timeline.Item>
 
                         <Timeline.Item
-                            title="Reorder Slides"
-                            bullet={<IconGitPullRequest size={12} />}
-                            lineVariant="dashed"
+                            bullet={<IconSlideshow size={20} />}
+                            title={<Text className={classes.timelineTitle}>Add Slides</Text>}
                         >
                             <Text color="dimmed" size="sm">
-                                Move slides left and right to adjust their order in the presentation by clicking and dragging the slide. or by using the arrow keys.
+                                Create new slides, start by clicking and dragging on the image to select an area, then
+                                complete the form to add the slide.
                             </Text>
                         </Timeline.Item>
 
-                        <Timeline.Item title="Review Project" bullet={<IconMessageDots size={12} />}>
+                        <Timeline.Item
+                            title={<Text className={classes.timelineTitle}>Edit Slides</Text>}
+                            bullet={<IconEdit size={20} />}
+                            lineVariant="dashed"
+                        >
                             <Text color="dimmed" size="sm">
-                                Check out a preview of your project on the {' '}
-                                <Text variant="link" component="span" inherit>
+                                Edit a slide, by clicking on the pencil icon for that slide in the list on the bottom.
+                                You can change the title, description, or make a new selection.
+                            </Text>
+                        </Timeline.Item>
+
+                        <Timeline.Item
+                            title={<Text className={classes.timelineTitle}>Rearrange Slides</Text>}
+                            bullet={<IconArrowsSort size={20} />}
+                            lineVariant="dashed"
+                        >
+                            <Text color="dimmed" size="sm">
+                                Rearrange slides, by clicking and dragging the slide in the list on the bottom using the
+                                handles.
+                            </Text>
+                        </Timeline.Item>
+
+                        <Timeline.Item
+                            title={<Text className={classes.timelineTitle}>Delete Slides</Text>}
+                            bullet={<IconTrash size={20} />}
+                        >
+                            <Text color="dimmed" size="sm">
+                                Delete a slide, by clicking on the trash can icon for that slide in the list on the
+                                bottom.
+                            </Text>
+                        </Timeline.Item>
+
+                        <Timeline.Item
+                            title={<Text className={classes.timelineTitle}>Publish Project</Text>}
+                            bullet={<IconMessageDots size={12} />}
+                        >
+                            <Text color="dimmed" size="sm">
+                                Check out your project on the&nbsp;{' '}
+                                <Text variant="link" component="span" onClick={() => setComponent('preview')} inherit>
                                     preview page
-                                </Text>{' '}
-                                and download the as an HTML file.
+                                </Text>
+                                . When you&apos;re happy with your project you can copy the embed code and paste it into
+                                your website.
                             </Text>
                         </Timeline.Item>
                     </Timeline>

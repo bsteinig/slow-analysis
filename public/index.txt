@@ -1,1 +1,9 @@
-<html> <head> <meta charset="utf-8"/> <meta http-equiv="X-UA-Compatible" content="IE=edge"/> <title>{title}</title> <meta name="description" content=""/> <meta name="viewport" content="width=device-width, initial-scale=1"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn@0.1.0/style.css"/> </head> <body> <div class="container"> <div class="img-comp"> <div class="img-comp-highlight" id="img-comp-highlight"> <div id="img-comp-mask"></div></div><img src="{imageURL}" alt="graphic" class="responsive" id="img-comp-img"/> </div><div class="info-comp"> <h1 class="headline">{title}</h1> <h3 class="comp-title" id="comp-title">Click Next to begin</h3> <h5 class="comp-info" id="comp-info"></h5> <div class="btn-group"> <button class="btn" onclick="backClick()">Back</button> <button class="btn" onclick="nextClick()">Next</button> </div></div></div><script src="https://cdn.jsdelivr.net/gh/bsteinig/slow-analysis-cdn@0.1.0/script.js" async defer></script> <div id="aspect" style="display: none;">{aspect}</div><div id="titles" style="display: none;">{GraphArea}</div><div id="descs" style="display: none;">{descriptions}</div><div id="coords" style="display: none;">{coords}</div></body></html>
+# This is a step by step instruction for creating a slideshow for a graph
+New Project: Create a new project on the <link>build page</link> by uploading an image and following the setup directions.
+Add Slides: To create new slides, start by clicking and dragging on the image to select an area, then complete the form to add the slide.
+Edit Slides: To edit a slide, click on the pencil icon for that slide in the list on the bottom. You can change the title, description, or make a new selection.
+Rearrange Slides: To rearrange the slides, click and drag the slide in the list on the bottom using the handles.
+Delete Slides: To delete a slide, click on the trash can icon for that slide in the list on the bottom.
+Publish Project: To save the project, click on the Preview tab in the top right. You can then copy the embed code and paste it into your website.
+# This is a step by step instruction for creating a slideshow for a graph
+

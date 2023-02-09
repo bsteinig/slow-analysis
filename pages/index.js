@@ -27,7 +27,7 @@ export default function IndexPage() {
     const renderComponent = () => {
         switch (component) {
             case 'overview':
-                return <Overview />;
+                return <Overview setComponent={setComponent} />;
             case 'build':
                 return <Build setComponent={setComponent} setProject={setProject} />;
             case 'preview':

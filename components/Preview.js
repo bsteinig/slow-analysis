@@ -154,7 +154,9 @@ function Preview({ setComponent, project }) {
     };
 
     useEffect(() => {
-        generateHTML(project);
+        if(project.slides.length > 0){
+            generateHTML(project);
+        }
     }, [project]);
 
     return (

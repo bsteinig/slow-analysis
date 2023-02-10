@@ -22,9 +22,10 @@ export default function IndexPage() {
     const { classes } = useStyles();
     const [component, setComponent] = useState('');
 
+    // First visit state
     const [firstVisit, setFirstVisit] = useSessionStorage({ key: 'firstVisit', defaultValue: true });
-
-    
+    const [isTourOpen, setOpen] = useState(true);
+    const [lastStep, setLastStep] = useSessionStorage({ key: 'lastStep', defaultValue: 0 });
 
     // Project state
     const [project, setProject] = useState({}); // image: url, title: string, slides: [{}, {}, {}]
@@ -33,14 +34,40 @@ export default function IndexPage() {
     const renderComponent = (setFirstVisit) => {
         switch (component) {
             case 'overview':
-                return <Overview setComponent={setComponent} />;
+                return (
+                    <Overview
+                        setComponent={setComponent}
+                        lastStep={lastStep}
+                        firstVisit={firstVisit}
+                        setFirstVisit={setFirstVisit}
+                        setOpen={setOpen}
+                    />
+                );
             case 'build':
-                return <TourWrapper setComponent={setComponent} setProject={setProject} />;
+                return firstVisit ? (
+                    <TourWrapper
+                        setComponent={setComponent}
+                        setProject={setProject}
+                        setFirstVisit={setFirstVisit}
+                        isTourOpen={isTourOpen}
+                        setOpen={setOpen}
+                        setLastStep={setLastStep}
+                        lastStep={lastStep}
+                    />
+                ) : (
+                    <Build setComponent={setComponent} setProject={setProject} />
+                );
             case 'preview':
                 return <Preview setComponent={setComponent} project={project} />;
             default:
                 return firstVisit ? (
-                    <Overview setComponent={setComponent} setFirstVisit={setFirstVisit}/>
+                    <Overview
+                        setComponent={setComponent}
+                        firstVisit={firstVisit}
+                        setFirstVisit={setFirstVisit}
+                        lastStep={lastStep}
+                        setOpen={setOpen}
+                    />
                 ) : (
                     <Build setComponent={setComponent} setProject={setProject} />
                 );

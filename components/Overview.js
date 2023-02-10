@@ -1,4 +1,4 @@
-import { createStyles, Flex, Group, Paper, Space, Stack, Text, Timeline, Title } from '@mantine/core';
+import { Button, createStyles, Flex, Group, Paper, Space, Stack, Text, Timeline, Title } from '@mantine/core';
 import { IconArrowsSort, IconEdit, IconFilePlus, IconMessageDots, IconSlideshow, IconTrash } from '@tabler/icons';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -37,14 +37,25 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function Overview({ setComponent }) {
+function Overview({ setComponent, lastStep, setFirstVisit, firstVisit, setOpen }) {
     const { classes } = useStyles();
 
     const timeStamps = [0, 18, 36, 51, 61, 79];
 
+    const handleTour = () => {
+        setFirstVisit(true);
+        setOpen(true);
+        setComponent('build');
+    };
+
     return (
         <Paper shadow="md" p="lg" radius="lg" my={20} className={classes.root}>
-            <Title className={classes.title}>Overview</Title>
+            <Group position="apart">
+                <Title className={classes.title}>Overview</Title>
+                {!firstVisit && (
+                    <Button onClick={() => handleTour()}>{lastStep === 0 ? 'Restart' : 'Resume'} Tour</Button>
+                )}
+            </Group>
             <Flex mt={10} gap={0} justify="flex-start" align="flex-start" direction="row" wrap="wrap">
                 <Stack className={classes.section} p="sm">
                     <Text size="md" mb={20}>

@@ -322,7 +322,7 @@ function ImageViewer({
     //!SECTION
 
     return (
-        <Grid.Col md={7} lg={8}>
+        <Grid.Col md={7} lg={8}  className="tour__imageviewer">
             <Paper withBorder radius="md" p="md" className={classes.root} ref={focusTrapRef}>
                 <Stack spacing="xs" mb={15}>
                     <Title order={3} >{isEditing !== -1 ? `Editing Slide: ${isEditing}` : 'Create a New Slide'}</Title>
@@ -434,7 +434,7 @@ function ImageViewer({
                     <Text pt="sm" size="sm" color="dimmed">
                         Image Settings:
                     </Text>
-                    <Group position="apart">
+                    <Group position="apart" className='tour__image-settings'>
                         <Group>
                             <Tooltip
                                 label={view ? 'See Full Image' : 'See Selection'}

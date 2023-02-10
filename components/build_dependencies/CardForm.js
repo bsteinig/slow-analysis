@@ -64,29 +64,28 @@ function CardForm({ selection, setFormSubmission, isEditing, slides }) {
     });
 
     const handleFormSubmit = (values) => {
-        if(selection.active){
-            setFormSubmission(values)
+        if (selection.active) {
+            setFormSubmission(values);
             componentForm.reset();
-        }else{
-            alert('Save Failed. Please make a selection on the image to the left.')
+        } else {
+            alert('Save Failed. Please make a selection on the image to the left.');
         }
     };
 
     useEffect(() => {
-      if(isEditing !== -1){
-        componentForm.setValues({
-          graphicalFeature: slides[isEditing].data.graphicalFeature,
-          description: slides[isEditing].data.description,
-        })
-      }
-      if(isEditing === -1){
-        componentForm.reset();
-      }
-    }, [isEditing])
-    
+        if (isEditing !== -1) {
+            componentForm.setValues({
+                graphicalFeature: slides[isEditing].data.graphicalFeature,
+                description: slides[isEditing].data.description,
+            });
+        }
+        if (isEditing === -1) {
+            componentForm.reset();
+        }
+    }, [isEditing]);
 
     return (
-        <Grid.Col md={5} lg={4}>
+        <Grid.Col md={5} lg={4} className="tour__cardform">
             <Paper radius="md" shadow="xs" p="md" className={classes.root}>
                 <LoadingOverlay
                     visible={!selection.active}

@@ -113,7 +113,7 @@ function DragnDrop({ slides, handlers, handleEditSlide, isEditing }) {
 
     return (
         <Grid.Col span={12} style={{ width: '100%' }}>
-            <Paper withBorder radius="md" p="sm" style={{ overflowX: 'auto' }}>
+            <Paper withBorder radius="md" p="sm" style={{ overflowX: 'auto' }} className="tour__dragdrop">
                 <Stack spacing={0}>
                     <Text size="lg" weight={600}>
                         Slides

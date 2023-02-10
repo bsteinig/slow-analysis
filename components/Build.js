@@ -29,8 +29,65 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function Build({ setComponent, setProject }) {
+function Build({ setComponent, setProject, firstVisit, forceSelection }) {
     const { classes } = useStyles();
+
+    // reactour state
+    useEffect(() => {
+        if (firstVisit) {
+            setSubmitted(true);
+            setImageURL(
+                'https://ourworldindata.org/uploads/2018/11/Annual-World-Population-since-10-thousand-BCE-for-OWID-800x498.png',
+            );
+            setTitle('My First Project');
+            const sample1selection = {
+                active: true,
+                startX: 0.15,
+                startY: 0.15,
+                endX: 0.75,
+                endY: 0.75,
+            };
+            const sample1form = {
+                graphicalFeature: 'Sample 1',
+                description: 'This is a sample description',
+            };
+            const newSlide = {
+                id: slides.length,
+                selection: sample1selection,
+                data: sample1form,
+            };
+            // append after 1 second
+            setTimeout(() => {
+                handlers.append(newSlide);
+            }, 1000);
+            const sample2selection = {
+                active: true,
+                startX: 0.15,
+                startY: 0.15,
+                endX: 0.75,
+                endY: 0.75,
+            };
+            const sample2form = {
+                graphicalFeature: 'Sample 2',
+                description: 'This is a sample description',
+            };
+            const newSlide2 = {
+                id: slides.length,
+                selection: sample2selection,
+                data: sample2form,
+            };
+            // append after 1 second
+            setTimeout(() => {
+                handlers.append(newSlide2);
+            }, 2000);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (forceSelection) {
+            setSelection({ active: true, startX: 0.15, startY: 0.15, endX: 0.75, endY: 0.75 });
+        }
+    }, [forceSelection]);
 
     // Image state
     const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });
@@ -72,14 +129,6 @@ function Build({ setComponent, setProject }) {
         handlers.setState([]);
         setStoreSlides([]);
         setRestartOpened(false);
-    };
-
-    const unpackProject = (project) => {
-        setImageURL(project.image);
-        setTitle(project.title);
-        setAspectRatio(project.aspect);
-        handlers.setState(project.slides);
-        setStoreSlides(project.slides);
     };
 
     // Form handlers
@@ -152,6 +201,7 @@ function Build({ setComponent, setProject }) {
                 onClose={() => setTrashOpened(false)}
                 title="Warning! Deleting Project"
                 zIndex={1000}
+                className="tour__trash-modal"
             >
                 <Text size="sm" color="dimmed">
                     By continuing you will be deleting the current project. This action cannot be undone.
@@ -196,7 +246,9 @@ function Build({ setComponent, setProject }) {
             <Paper shadow="md" p="lg" radius="lg" my={20} className={classes.root}>
                 <Stack spacing={0}>
                     <Stack align="flex-start" justify="flex-start" spacing={0} pl={20}>
-                        <Title className={classes.title}>Build</Title>
+                        <Title className={classes.title + ' tour__welcome'} data_tut="tour__welcome">
+                            Build
+                        </Title>
                         <Text size="sm" color="dimmed">
                             New here? Check out our{' '}
                             <Anchor component="button" type="button" onClick={() => setComponent('overview')}>
@@ -206,7 +258,7 @@ function Build({ setComponent, setProject }) {
                         </Text>
                     </Stack>
                     {submitted && (
-                        <Group position="apart" my={15}>
+                        <Group position="apart" my={15} className="tour__titlegroup">
                             {submitted && <Title>{title}</Title>}
                             <Stack align="flex-start" justify="flex-start" spacing={3} pr="lg">
                                 <Text size="sm" color="dimmed">
@@ -223,6 +275,7 @@ function Build({ setComponent, setProject }) {
                                             variant="filled"
                                             label="Project Settings"
                                             onClick={() => setSettingsOpened(true)}
+                                            className="tour__project-settings"
                                         >
                                             <IconSettings size={25} />
                                         </ActionIcon>
@@ -237,6 +290,7 @@ function Build({ setComponent, setProject }) {
                                             color="yellow"
                                             variant="filled"
                                             label="Restart Project"
+                                            className="tour__project-restart"
                                             onClick={() => setRestartOpened(true)}
                                         >
                                             <IconRefreshAlert size={25} />
@@ -248,7 +302,8 @@ function Build({ setComponent, setProject }) {
                                             radius="md"
                                             color="red"
                                             variant="filled"
-                                            label="Trash Projec"
+                                            label="Trash Project"
+                                            className="tour__project-trash"
                                             onClick={() => setTrashOpened(true)}
                                         >
                                             <IconTrash size={25} />
@@ -292,5 +347,12 @@ function Build({ setComponent, setProject }) {
         </>
     );
 }
+
+Build.defaultProps = {
+    setComponent: () => {},
+    setProject: () => {},
+    firstVisit: false,
+    forceSelection: false,
+};
 
 export default Build;

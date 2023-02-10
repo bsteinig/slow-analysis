@@ -1,17 +1,7 @@
 import { createStyles, Flex, Group, Paper, Space, Stack, Text, Timeline, Title } from '@mantine/core';
-import {
-    IconArrowsSort,
-    IconEdit,
-    IconFilePlus,
-    IconGitBranch,
-    IconGitCommit,
-    IconGitPullRequest,
-    IconMessageDots,
-    IconSlideshow,
-    IconTrash,
-} from '@tabler/icons';
+import { IconArrowsSort, IconEdit, IconFilePlus, IconMessageDots, IconSlideshow, IconTrash } from '@tabler/icons';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -50,6 +40,8 @@ const useStyles = createStyles((theme) => ({
 function Overview({ setComponent }) {
     const { classes } = useStyles();
 
+    const timeStamps = [0, 18, 36, 51, 61, 79];
+
     return (
         <Paper shadow="md" p="lg" radius="lg" my={20} className={classes.root}>
             <Title className={classes.title}>Overview</Title>
@@ -67,11 +59,11 @@ function Overview({ setComponent }) {
                     <div className={classes.videoWrapper}>
                         <iframe
                             width="560"
-                            height="315"
+                            height="200"
                             className={classes.video}
+                            id="ytplayer"
                             src="https://www.youtube-nocookie.com/embed/usImb5pPOgY"
                             title="YouTube video player"
-                            frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                         />

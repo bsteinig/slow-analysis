@@ -22,7 +22,9 @@
         "react": "18.2.0",
         "react-beautiful-dnd": "^13.1.1",
         "react-dom": "18.2.0",
-        "react-json-view": "^1.21.3"
+        "react-json-view": "^1.21.3",
+        "reactour": "^1.19.0",
+        "styled-components": "^4.0.0"
     },
     "devDependencies": {
         "@types/node": "18.6.4",

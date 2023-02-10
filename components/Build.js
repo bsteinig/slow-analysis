@@ -74,6 +74,14 @@ function Build({ setComponent, setProject }) {
         setRestartOpened(false);
     };
 
+    const unpackProject = (project) => {
+        setImageURL(project.image);
+        setTitle(project.title);
+        setAspectRatio(project.aspect);
+        handlers.setState(project.slides);
+        setStoreSlides(project.slides);
+    };
+
     // Form handlers
     useEffect(() => {
         console.log('formSubmission', formSubmission);

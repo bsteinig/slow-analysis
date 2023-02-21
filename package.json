@@ -7,7 +7,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "export": "next build && next export"
+        "export": "next build && next export",
+        "cypress": "cypress open"
     },
     "dependencies": {
         "@emotion/react": "^11.10.0",
@@ -19,6 +20,7 @@
         "@mantine/next": "5.9.3",
         "@mantine/prism": "5.9.3",
         "@tabler/icons": "^1.116.1",
+        "cypress": "^12.6.0",
         "next": "12.2.4",
         "react": "18.2.0",
         "react-beautiful-dnd": "^13.1.1",

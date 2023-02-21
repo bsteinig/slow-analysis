@@ -1,5 +1,5 @@
 import { Button, createStyles, Flex, Group, Paper, Space, Stack, Text, Timeline, Title } from '@mantine/core';
-import { IconArrowsSort, IconEdit, IconFilePlus, IconMessageDots, IconSlideshow, IconTrash } from '@tabler/icons';
+import { IconArrowsSort, IconChartAreaLine, IconCrane, IconEdit, IconFileExport, IconFilePlus, IconMessageDots, IconSchool, IconSlideshow, IconTrash } from '@tabler/icons';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -35,6 +35,11 @@ const useStyles = createStyles((theme) => ({
         color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[9],
         fontWeight: 600,
     },
+    inline: {
+        fontSize: 16,
+        cursor: 'pointer',
+        color: theme.colors.blue[5],
+    }
 }));
 
 function Overview({ setComponent, lastStep, setFirstVisit, firstVisit, setOpen }) {
@@ -77,6 +82,7 @@ function Overview({ setComponent, lastStep, setFirstVisit, firstVisit, setOpen }
                             title="YouTube video player"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
+                            style={{ border: 'none' }}
                         />
                     </div>
                 </Stack>
@@ -88,7 +94,8 @@ function Overview({ setComponent, lastStep, setFirstVisit, firstVisit, setOpen }
                         >
                             <Text color="dimmed" size="sm">
                                 Create a new project on the&nbsp;
-                                <Text variant="link" component="span" onClick={() => setComponent('build')} inherit>
+                                <Text className={classes.inline} variant="link" component="span" onClick={() => setComponent('build')} inherit>
+                                    <IconCrane size={18} style={{ transform: 'translate(0,15%)'}} />{' '}
                                     build page
                                 </Text>{' '}
                                 by uploading an image and following the setup directions.
@@ -139,11 +146,12 @@ function Overview({ setComponent, lastStep, setFirstVisit, firstVisit, setOpen }
 
                         <Timeline.Item
                             title={<Text className={classes.timelineTitle}>Publish Project</Text>}
-                            bullet={<IconMessageDots size={12} />}
+                            bullet={<IconFileExport size={20} />}
                         >
                             <Text color="dimmed" size="sm">
                                 Check out your project on the&nbsp;{' '}
-                                <Text variant="link" component="span" onClick={() => setComponent('preview')} inherit>
+                                <Text className={classes.inline} variant="link" component="span" onClick={() => setComponent('preview')} inherit>
+                                    <IconChartAreaLine size={18} style={{ transform: 'translate(0,22%)'}} />{' '}
                                     preview page
                                 </Text>
                                 . When you&apos;re happy with your project you can copy the embed code and paste it into

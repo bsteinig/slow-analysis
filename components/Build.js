@@ -3,17 +3,19 @@ import {
     Anchor,
     Button,
     createStyles,
+    Divider,
     Grid,
     Group,
     Modal,
     Paper,
     Stack,
     Text,
+    TextInput,
     Title,
     Tooltip,
 } from '@mantine/core';
 import { useListState, useSessionStorage, useToggle } from '@mantine/hooks';
-import { IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
+import { IconAlertTriangle, IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
 import DragnDrop from './build_dependencies/DragnDrop';
@@ -199,7 +201,11 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
             <Modal
                 opened={trashOpened}
                 onClose={() => setTrashOpened(false)}
-                title="Warning! Deleting Project"
+                title={
+                    <Title order={4} color="red.6">
+                        <IconAlertTriangle size={25} stroke={2.25} style={{ transform: 'translate(0,22%)' }} /> Warning!
+                    </Title>
+                }
                 zIndex={1000}
                 className="tour__trash-modal"
             >
@@ -218,7 +224,11 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
             <Modal
                 opened={restartOpened}
                 onClose={() => setRestartOpened(false)}
-                title="Warning! Restarting Project"
+                title={
+                    <Title order={4} color="red.6">
+                        <IconAlertTriangle size={25} stroke={2.25} style={{ transform: 'translate(0,22%)' }} /> Warning!
+                    </Title>
+                }
                 zIndex={1000}
             >
                 <Text size="sm" color="dimmed">
@@ -233,10 +243,32 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
                     </Button>
                 </Group>
             </Modal>
-            <Modal opened={settingsOpened} onClose={() => setSettingsOpened(false)} title="Settings" zIndex={1000}>
-                <Button variant="light" radius="md" style={{ width: 'fit-content' }} onClick={() => toggleKeyboard()}>
+            <Modal
+                opened={settingsOpened}
+                onClose={() => setSettingsOpened(false)}
+                title={
+                    <Title order={4}>
+                        <IconSettings size={20} stroke={2.25} style={{ transform: 'translate(0,22%)' }} /> Project
+                        Settings
+                    </Title>
+                }
+                zIndex={1000}
+            >
+                <Text size="md">Accesibility Settings:</Text>
+                <Button
+                    variant="light"
+                    radius="md"
+                    my="md"
+                    style={{ width: 'fit-content' }}
+                    onClick={() => toggleKeyboard()}
+                >
                     {keyboardEnabled ? 'Disable' : 'Enable'} Keyboard Selection
                 </Button>
+                <Divider />
+                <Text size="md" my="md">
+                    Edit Title:
+                </Text>
+                <TextInput value={title} onChange={(e) => setTitle(e.target.value)} />
                 <Group position="center" mt={20}>
                     <Button variant="outline" onClick={() => setSettingsOpened(false)}>
                         Close

@@ -1,6 +1,12 @@
 const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true,
-}
+    reactStrictMode: false,
+    swcMinify: true,
+};
 
-module.exports = nextConfig
+// const nextConfig = {
+//     reactStrictMode: false,
+//     swcMinify: true,
+//     assetPrefix: './',
+// };
+
+module.exports = nextConfig;

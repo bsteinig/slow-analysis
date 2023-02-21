@@ -23,7 +23,7 @@ export default function IndexPage() {
     const [component, setComponent] = useState('');
 
     // First visit state
-    const [firstVisit, setFirstVisit] = useSessionStorage({ key: 'firstVisit', defaultValue: true });
+    const [firstVisit, setFirstVisit] = useLocalStorage({ key: 'firstVisit', defaultValue: true });
     const [isTourOpen, setOpen] = useState(true);
     const [lastStep, setLastStep] = useSessionStorage({ key: 'lastStep', defaultValue: 0 });
 

@@ -107,7 +107,7 @@ function ImageViewer({
     const { ref: mouseRef, x: mouseX, y: mouseY } = useMouse();
     const mergedRef = useMergedRef(mouseRef, moveRef, sizeRef);
 
-    // Keyboard selection state
+    //SECTION Keyboard selection state
     const [keyboardSelection, setKeyboardSelection] = useState({
         startX: 0.05,
         startY: 0.05,
@@ -120,26 +120,25 @@ function ImageViewer({
     // This is the component specific control for whether a selection is active
     const [keyboardActive, toggleKeyboardActive] = useToggle();
     const toggleKeyboardSelection = () => {
-        if(keyboardActive){
+        if (keyboardActive) {
             setSelection({
                 startX: keyboardSelection.startX,
                 startY: keyboardSelection.startY,
                 endX: keyboardSelection.endX,
                 endY: keyboardSelection.endY,
-                active: true 
+                active: true,
             });
-        }else{
+        } else {
             setSelection({
                 startX: keyboardSelection.startX,
                 startY: keyboardSelection.startY,
                 endX: keyboardSelection.endX,
                 endY: keyboardSelection.endY,
-                active: false 
+                active: false,
             });
         }
         toggleKeyboardActive();
-    }
-
+    };
 
     const focusTrapRef = useFocusTrap(keyboardActive);
 
@@ -258,6 +257,7 @@ function ImageViewer({
         }
     }, [keyboardResize]);
     //!SECTION
+    //!SECTION
 
     //SECTION Mouse selection
     useEffect(() => {
@@ -287,9 +287,9 @@ function ImageViewer({
     }, [active]);
 
     useEffect(() => {
-        if (isEditing !== -1){
-            setStartValue({x: selection.startX, y: selection.startY})
-            setValue({x: selection.endX, y: selection.endY})
+        if (isEditing !== -1) {
+            setStartValue({ x: selection.startX, y: selection.startY });
+            setValue({ x: selection.endX, y: selection.endY });
         }
     }, [isEditing]);
     //!SECTION
@@ -321,11 +321,46 @@ function ImageViewer({
     }, [selectionReset]);
     //!SECTION
 
+    //SECTION: Clip Path Generator
+    const generateClipPath = () => {
+        // NOTE: This function generates a clip path string based on startValue and value
+        var sx, sy, ex, ey;
+        if (startValue.x < value.x) {
+            sx = startValue.x;
+            ex = value.x;
+            if (startValue.y < value.y) {
+                sy = startValue.y;
+                ey = value.y;
+            } else {
+                sy = value.y;
+                ey = startValue.y;
+            }
+        } else {
+            sx = value.x;
+            ex = startValue.x;
+            if (startValue.y < value.y) {
+                sy = startValue.y;
+                ey = value.y;
+            } else {
+                sy = value.y;
+                ey = startValue.y;
+            }
+        }
+        console.log(
+            `polygon(0% 0%, 0% 100%, ${sx * 100}% 100%, ${sx * 100}% ${sy * 100}%, ${ex * 100}% ${sy * 100}%, ${
+                ex * 100
+            }% ${ey * 100}%, ${sx * 100}% ${ey * 100}%, ${sx * 100}% 100%, 100% 100%, 100% 0%)`,
+        );
+        return `polygon(0% 0%, 0% 100%, ${sx * 100}% 100%, ${sx * 100}% ${sy * 100}%, ${ex * 100}% ${sy * 100}%, ${
+            ex * 100
+        }% ${ey * 100}%, ${sx * 100}% ${ey * 100}%, ${sx * 100}% 100%, 100% 100%, 100% 0%)`;
+    };
+
     return (
-        <Grid.Col md={7} lg={8}  className="tour__imageviewer">
+        <Grid.Col md={7} lg={8} className="tour__imageviewer">
             <Paper withBorder radius="md" p="md" className={classes.root} ref={focusTrapRef}>
                 <Stack spacing="xs" mb={15}>
-                    <Title order={3} >{isEditing !== -1 ? `Editing Slide: ${isEditing}` : 'Create a New Slide'}</Title>
+                    <Title order={3}>{isEditing !== -1 ? `Editing Slide: ${isEditing}` : 'Create a New Slide'}</Title>
                     <Collapse in={keyboardEnabled}>
                         <Stack spacing="xs">
                             <Text size="sm" color="dimmed">
@@ -345,9 +380,6 @@ function ImageViewer({
                     <Box
                         className={classes.highlight}
                         sx={(theme) => ({
-                            backgroundColor: !view
-                                ? theme.fn.rgba(theme.colors.gray[9], 0.75)
-                                : theme.fn.rgba(theme.colors.gray[9], 0),
                             aspectRatio: `${imageSize.aspectRatio}`,
                         })}
                         ref={mergedRef}
@@ -394,30 +426,19 @@ function ImageViewer({
                             </div>
                         ) : (
                             <div
+                                className="clip-path-div"
                                 style={{
                                     position: 'absolute',
-                                    left: `${value.x < startValue.x ? `unset` : `calc(${startValue.x * 100}% - 1px )`}`,
-                                    right: `${
-                                        value.x < startValue.x ? `calc(${(1 - startValue.x) * 100}% - 1px  )` : `unset`
-                                    }`,
-                                    top: `${value.y < startValue.y ? `unset` : `calc(${startValue.y * 100}% - 1px  )`}`,
-                                    bottom: `${
-                                        value.y < startValue.y ? `calc(${(1 - startValue.y) * 100}% - 1px   )` : `unset`
-                                    }`,
-                                    width: `${
-                                        value.x < startValue.x
-                                            ? `calc(${(startValue.x - value.x) * 100}% + 2px)`
-                                            : `calc(${(value.x - startValue.x) * 100}% + 2px)`
-                                    }`,
-                                    height: `${
-                                        value.y < startValue.y
-                                            ? `calc(${(startValue.y - value.y) * 100}% + 2px)`
-                                            : `calc(${(value.y - startValue.y) * 100}% + 2px)`
-                                    }`,
-                                    backgroundColor: theme.fn.rgba(theme.colors.gray[7], 0.0),
-                                    backdropFilter: `${
-                                        !view ? 'brightness(2.25) saturate(1.25) contrast(1.75)' : 'unset'
-                                    }`,
+                                    top: 0,
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    height: '100%',
+                                    width: '100%',
+                                    zIndex: 10,
+                                    backgroundColor: !view
+                                        ? theme.fn.rgba(theme.colors.gray[9], 0.75)
+                                        : theme.fn.rgba(theme.colors.gray[9], 0),
+                                    clipPath: `${generateClipPath()}`,
                                 }}
                             />
                         )}
@@ -434,7 +455,7 @@ function ImageViewer({
                     <Text pt="sm" size="sm" color="dimmed">
                         Image Settings:
                     </Text>
-                    <Group position="apart" className='tour__image-settings'>
+                    <Group position="apart" className="tour__image-settings">
                         <Group>
                             <Tooltip
                                 label={view ? 'See Full Image' : 'See Selection'}

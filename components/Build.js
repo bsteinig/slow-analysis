@@ -2,10 +2,12 @@ import {
     ActionIcon,
     Anchor,
     Button,
+    Chip,
     createStyles,
     Divider,
     Grid,
     Group,
+    Kbd,
     Modal,
     Paper,
     Stack,
@@ -14,7 +16,7 @@ import {
     Title,
     Tooltip,
 } from '@mantine/core';
-import { useListState, useSessionStorage, useToggle } from '@mantine/hooks';
+import { useHotkeys, useListState, useSessionStorage, useToggle } from '@mantine/hooks';
 import { IconAlertTriangle, IconRefreshAlert, IconSettings, IconTrash } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import CardForm from './build_dependencies/CardForm';
@@ -34,6 +36,9 @@ const useStyles = createStyles((theme) => ({
 function Build({ setComponent, setProject, firstVisit, forceSelection }) {
     const { classes } = useStyles();
 
+    // Accessibility keyboard shortcut
+    useHotkeys([['ctrl+shift+K', () => toggleKeyboard()]]);
+
     // reactour state
     useEffect(() => {
         if (firstVisit) {
@@ -42,46 +47,48 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
                 'https://ourworldindata.org/uploads/2018/11/Annual-World-Population-since-10-thousand-BCE-for-OWID-800x498.png',
             );
             setTitle('My First Project');
-            const sample1selection = {
-                active: true,
-                startX: 0.15,
-                startY: 0.15,
-                endX: 0.75,
-                endY: 0.75,
-            };
-            const sample1form = {
-                graphicalFeature: 'Sample 1',
-                description: 'This is a sample description',
-            };
-            const newSlide = {
-                id: slides.length,
-                selection: sample1selection,
-                data: sample1form,
-            };
-            // append after 1 second
-            setTimeout(() => {
-                handlers.append(newSlide);
-            }, 1000);
-            const sample2selection = {
-                active: true,
-                startX: 0.15,
-                startY: 0.15,
-                endX: 0.75,
-                endY: 0.75,
-            };
-            const sample2form = {
-                graphicalFeature: 'Sample 2',
-                description: 'This is a sample description',
-            };
-            const newSlide2 = {
-                id: slides.length,
-                selection: sample2selection,
-                data: sample2form,
-            };
-            // append after 1 second
-            setTimeout(() => {
-                handlers.append(newSlide2);
-            }, 2000);
+            if (slides.length === 0) {
+                const sample1selection = {
+                    active: true,
+                    startX: 0.15,
+                    startY: 0.15,
+                    endX: 0.75,
+                    endY: 0.75,
+                };
+                const sample1form = {
+                    graphicalFeature: 'Sample 1',
+                    description: 'This is a sample description',
+                };
+                const newSlide = {
+                    id: slides.length,
+                    selection: sample1selection,
+                    data: sample1form,
+                };
+                // append after 1 second
+                setTimeout(() => {
+                    handlers.append(newSlide);
+                }, 1000);
+                const sample2selection = {
+                    active: true,
+                    startX: 0.15,
+                    startY: 0.15,
+                    endX: 0.75,
+                    endY: 0.75,
+                };
+                const sample2form = {
+                    graphicalFeature: 'Sample 2',
+                    description: 'This is a sample description',
+                };
+                const newSlide2 = {
+                    id: slides.length,
+                    selection: sample2selection,
+                    data: sample2form,
+                };
+                // append after 1 second
+                setTimeout(() => {
+                    handlers.append(newSlide2);
+                }, 2000);
+            }
         }
     }, []);
 
@@ -254,7 +261,7 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
                 }
                 zIndex={1000}
             >
-                <Text size="md">Accesibility Settings:</Text>
+                <Text size="md">Accessibility Settings:</Text>
                 <Button
                     variant="light"
                     radius="md"
@@ -278,15 +285,23 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
             <Paper shadow="md" p="lg" radius="lg" my={20} className={classes.root}>
                 <Stack spacing={0}>
                     <Stack align="flex-start" justify="flex-start" spacing={0} pl={20}>
-                        <Title className={classes.title + ' tour__welcome'} data_tut="tour__welcome">
-                            Build
-                        </Title>
+                        <Group>
+                            <Title className={classes.title + ' tour__welcome'} data_tut="tour__welcome">
+                                Build
+                            </Title>
+                            <Chip variant="filled" size="xs" checked={keyboardEnabled}>
+                                {keyboardEnabled ? 'Keyboard Mode Enabled' : 'Keyboard Mode Disabled'}
+                            </Chip>
+                        </Group>
                         <Text size="sm" color="dimmed">
                             New here? Check out our{' '}
                             <Anchor component="button" type="button" onClick={() => setComponent('overview')}>
                                 quick start guide
                             </Anchor>{' '}
                             to get started.
+                        </Text>
+                        <Text size="sm" color="dimmed" mt={5}>
+                            Enable keyboard selection with {' '}<Kbd>ctrl</Kbd> + <Kbd>shift</Kbd> +<Kbd>k</Kbd>
                         </Text>
                     </Stack>
                     {submitted && (
@@ -370,6 +385,7 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
                             handlers={handlers}
                             handleEditSlide={handleEditSlide}
                             isEditing={isEditing}
+                            keyboardEnabled={keyboardEnabled}
                         />
                     </Grid>
                 ) : (

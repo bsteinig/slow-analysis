@@ -52,8 +52,8 @@ const useStyles = createStyles((theme) => ({
         width: '100%',
         height: '500px',
         border: 'none',
-        paddingTop: '50px'
-    }
+        paddingTop: '50px',
+    },
 }));
 
 function Preview({ setComponent, project }) {
@@ -154,7 +154,7 @@ function Preview({ setComponent, project }) {
     };
 
     useEffect(() => {
-        if(project.slides?.length > 0){
+        if (project.slides?.length > 0) {
             generateHTML(project);
         }
     }, [project]);
@@ -231,19 +231,6 @@ function Preview({ setComponent, project }) {
                                         Copy HTML Embed
                                     </Button>
                                 </Tooltip>
-                                <Tooltip
-                                    multiline
-                                    width={220}
-                                    withArrow
-                                    transition="fade"
-                                    transitionDuration={200}
-                                    label="Use this option to create an HTML file that you can use to create a standalone application. This option is recommended if you want to use your project offline."
-                                    events={{ hover: true, focus: true, touch: false }}
-                                >
-                                    <Button leftIcon={<IconAppWindow size={24} />} radius="md">
-                                        Copy HTML Canvas
-                                    </Button>
-                                </Tooltip>
                                 <Button
                                     leftIcon={<IconSourceCode size={24} />}
                                     color="teal"
@@ -270,3 +257,18 @@ function Preview({ setComponent, project }) {
 }
 
 export default Preview;
+/*
+                                <Tooltip
+                                    multiline
+                                    width={220}
+                                    withArrow
+                                    transition="fade"
+                                    transitionDuration={200}
+                                    label="Use this option to create an HTML file that you can use to create a standalone application. This option is recommended if you want to use your project offline."
+                                    events={{ hover: true, focus: true, touch: false }}
+                                >
+                                    <Button leftIcon={<IconAppWindow size={24} />} radius="md">
+                                        Copy HTML Canvas
+                                    </Button>
+                                </Tooltip>
+                                */

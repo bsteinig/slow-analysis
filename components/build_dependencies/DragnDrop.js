@@ -43,7 +43,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function DragnDrop({ slides, handlers, handleEditSlide, isEditing }) {
+function DragnDrop({ slides, handlers, handleEditSlide, isEditing, keyboardEnabled }) {
     const { classes, cx } = useStyles();
 
     const items = slides.map((slide, index) => (
@@ -119,7 +119,7 @@ function DragnDrop({ slides, handlers, handleEditSlide, isEditing }) {
                         Slides
                     </Text>
                     <Text size="xs" color="dimmed">
-                        Drag and drop to reorder
+                        {!keyboardEnabled ? 'Drag and drop to reorder slides. Click on the edit icon to edit a slide. Remove a slide by clicking on the trash icon.' : 'Enable reordering by pressing the spacebar on the slide handle. Use the arrow keys to move slides. Click on the edit icon to edit a slide. Remove a slide by clicking on the trash icon.' }
                     </Text>
                 </Stack>
                 <DragDropContext

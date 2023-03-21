@@ -21,6 +21,7 @@ import {
 } from '@mantine/core';
 import { useElementSize, useFocusTrap, useMergedRef, useMouse, useMove, useToggle } from '@mantine/hooks';
 import {
+    IconArrowsMaximize,
     IconArrowsMove,
     IconEye,
     IconEyeOff,
@@ -346,11 +347,35 @@ function ImageViewer({
                 ey = startValue.y;
             }
         }
-        console.log(
-            `polygon(0% 0%, 0% 100%, ${sx * 100}% 100%, ${sx * 100}% ${sy * 100}%, ${ex * 100}% ${sy * 100}%, ${
-                ex * 100
-            }% ${ey * 100}%, ${sx * 100}% ${ey * 100}%, ${sx * 100}% 100%, 100% 100%, 100% 0%)`,
-        );
+        return `polygon(0% 0%, 0% 100%, ${sx * 100}% 100%, ${sx * 100}% ${sy * 100}%, ${ex * 100}% ${sy * 100}%, ${
+            ex * 100
+        }% ${ey * 100}%, ${sx * 100}% ${ey * 100}%, ${sx * 100}% 100%, 100% 100%, 100% 0%)`;
+    };
+
+    const generateKeyboardClipPath = () => {
+        // NOTE: This function generates a clip path string based on keyboardSelection
+        var sx, sy, ex, ey;
+        if (keyboardSelection.startX < keyboardSelection.endX) {
+            sx = keyboardSelection.startX;
+            ex = keyboardSelection.endX;
+            if (keyboardSelection.startY < keyboardSelection.endY) {
+                sy = keyboardSelection.startY;
+                ey = keyboardSelection.endY;
+            } else {
+                sy = keyboardSelection.endY;
+                ey = keyboardSelection.startY;
+            }
+        } else {
+            sx = keyboardSelection.endX;
+            ex = keyboardSelection.startX;
+            if (keyboardSelection.startY < keyboardSelection.endY) {
+                sy = keyboardSelection.startY;
+                ey = keyboardSelection.endY;
+            } else {
+                sy = keyboardSelection.endY;
+                ey = keyboardSelection.startY;
+            }
+        }
         return `polygon(0% 0%, 0% 100%, ${sx * 100}% 100%, ${sx * 100}% ${sy * 100}%, ${ex * 100}% ${sy * 100}%, ${
             ex * 100
         }% ${ey * 100}%, ${sx * 100}% ${ey * 100}%, ${sx * 100}% 100%, 100% 100%, 100% 0%)`;
@@ -368,9 +393,36 @@ function ImageViewer({
                                 selection. Select the resize handle with enter and use the arrow keys to resize the
                                 selection.
                             </Text>
-                            <Button size="sm" onClick={() => toggleKeyboardSelection()} variant="secondary">
-                                {keyboardActive ? 'End Selection' : 'Begin Selection'}
-                            </Button>
+
+                            <Group noWrap spacing="xl">
+                                <Button size="sm" onClick={() => toggleKeyboardSelection()} variant="secondary">
+                                    {keyboardActive ? 'End Selection' : 'Begin Selection'}
+                                </Button>
+                                <Group>
+                                    <ActionIcon
+                                        onClick={() => toggleKeyboardMove()}
+                                        disabled={!keyboardActive}
+                                        label="Move Selection"
+                                        color="dark"
+                                        size="lg"
+                                        radius="md"
+                                        variant='filled'
+                                    >
+                                        <IconArrowsMove size={26} color={view ? 'none' : 'white'} />
+                                    </ActionIcon>
+                                    <ActionIcon
+                                        onClick={() => toggleKeyboardResize()}
+                                        disabled={!keyboardActive}
+                                        label="Resize Selection"
+                                        color="dark"
+                                        size="lg"
+                                        radius="md"
+                                        variant='filled'
+                                    >
+                                        <IconArrowsMaximize size={26} color={view ? 'none' : 'white'} />
+                                    </ActionIcon>
+                                </Group>
+                            </Group>
                         </Stack>
                     </Collapse>
                 </Stack>
@@ -400,30 +452,18 @@ function ImageViewer({
                             <div
                                 style={{
                                     position: 'absolute',
-                                    left: `calc(${keyboardSelection.startX * 100}% - 1px )`,
-                                    top: `calc(${keyboardSelection.startY * 100}% - 1px  )`,
-                                    width: `calc(${(keyboardSelection.endX - keyboardSelection.startX) * 100}% + 2px)`,
-                                    height: `calc(${(keyboardSelection.endY - keyboardSelection.startY) * 100}% + 2px)`,
-                                    backgroundColor: theme.fn.rgba(theme.colors.gray[7], 0.0),
-                                    backdropFilter: `${
-                                        !view ? 'brightness(2.25) saturate(1.25) contrast(1.75)' : 'unset'
-                                    }`,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'flex-end',
+                                    top: 0,
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    height: '100%',
+                                    width: '100%',
+                                    zIndex: 10,
+                                    backgroundColor: !view
+                                        ? theme.fn.rgba(theme.colors.gray[9], 0.75)
+                                        : theme.fn.rgba(theme.colors.gray[9], 0),
+                                    clipPath: `${generateKeyboardClipPath()}`,
                                 }}
-                            >
-                                {keyboardActive && (
-                                    <Group noWrap position="apart">
-                                        <ActionIcon p={0} color="blue" onClick={() => toggleKeyboardMove()}>
-                                            <IconArrowsMove size={20} color={view ? 'none' : 'black'} />
-                                        </ActionIcon>
-                                        <ActionIcon p={0} color="blue" onClick={() => toggleKeyboardResize()}>
-                                            <IconSlashes size={20} color={view ? 'none' : 'black'} />
-                                        </ActionIcon>
-                                    </Group>
-                                )}
-                            </div>
+                            ></div>
                         ) : (
                             <div
                                 className="clip-path-div"
@@ -458,14 +498,14 @@ function ImageViewer({
                     <Group position="apart" className="tour__image-settings">
                         <Group>
                             <Tooltip
-                                label={view ? 'See Full Image' : 'See Selection'}
+                                label={!view ? 'See Full Image' : 'See Selection'}
                                 events={{ hover: true, focus: true, touch: false }}
                             >
                                 <ActionIcon
                                     size="lg"
                                     radius="md"
                                     variant="filled"
-                                    label={view ? 'See Selection' : 'See Full Image'}
+                                    label={!view ? 'See Selection' : 'See Full Image'}
                                     onClick={() => toggleView()}
                                 >
                                     {view ? <IconEye size={25} /> : <IconEyeOff size={25} />}

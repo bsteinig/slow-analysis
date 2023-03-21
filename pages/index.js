@@ -1,6 +1,7 @@
 import { Container, createStyles } from '@mantine/core';
 import { useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
+import About from '../components/About';
 import Build from '../components/Build';
 import Nav from '../components/Nav';
 import Overview from '../components/Overview';
@@ -59,6 +60,8 @@ export default function IndexPage() {
                 );
             case 'preview':
                 return <Preview setComponent={setComponent} project={project} />;
+            case 'about':
+                return <About />;
             default:
                 return firstVisit ? (
                     <Overview

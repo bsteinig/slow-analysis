@@ -10,7 +10,7 @@ import {
     useMantineColorScheme,
     useMantineTheme,
 } from '@mantine/core';
-import { IconChartAreaLine, IconCrane, IconMoonStars, IconSchool, IconSun } from '@tabler/icons';
+import { IconChartAreaLine, IconCrane, IconInfoCircle, IconMoonStars, IconSchool, IconSun } from '@tabler/icons';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({
@@ -70,7 +70,7 @@ function Nav({ setActive }) {
             onClick={() => setActive(item.value)}
         >
             <item.icon size={24} color={theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[9]} />
-            <MediaQuery smallerThan="xs" styles={{ display: 'none'}} >
+            <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
                 <Text weight={600} size="md" ml={7}>
                     {item.label}
                 </Text>
@@ -91,10 +91,39 @@ function Nav({ setActive }) {
                 borderStyle: 'solid !important',
             })}
         >
+            <Center
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    height: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <ActionIcon
+                    onClick={() => setActive('about')}
+                    size="lg"
+                    radius="xl"
+                    sx={(theme) => ({
+                        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
+                        color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
+                    })}
+                >
+                    <IconInfoCircle size={24} />
+                </ActionIcon>
+            </Center>
             <Group noWrap className={classes.linkGroup}>
                 {links}
             </Group>
-            <Center style={{ display: 'flex', flexDirection: 'column', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+            <Center
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    height: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
                 <ActionIcon
                     onClick={() => toggleColorScheme()}
                     size="lg"

@@ -289,20 +289,27 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
                             <Title className={classes.title + ' tour__welcome'} data_tut="tour__welcome">
                                 Build
                             </Title>
-                            <Chip variant="filled" size="xs" checked={keyboardEnabled}>
-                                {keyboardEnabled ? 'Keyboard Mode Enabled' : 'Keyboard Mode Disabled'}
-                            </Chip>
+                            {submitted && (
+                                <Chip variant="filled" size="xs" checked={keyboardEnabled}>
+                                    {keyboardEnabled ? 'Keyboard Mode Enabled' : 'Keyboard Mode Disabled'}
+                                </Chip>
+                            )}
                         </Group>
-                        <Text size="sm" color="dimmed">
-                            New here? Check out our{' '}
-                            <Anchor component="button" type="button" onClick={() => setComponent('overview')}>
-                                quick start guide
-                            </Anchor>{' '}
-                            to get started.
-                        </Text>
-                        <Text size="sm" color="dimmed" mt={5}>
-                            Enable keyboard selection with {' '}<Kbd>ctrl</Kbd> + <Kbd>shift</Kbd> +<Kbd>k</Kbd>
-                        </Text>
+                        {submitted && (
+                            <>
+                                <Text size="sm" color="dimmed">
+                                    New here? Check out our{' '}
+                                    <Anchor component="button" type="button" onClick={() => setComponent('overview')}>
+                                        quick start guide
+                                    </Anchor>{' '}
+                                    to get started.
+                                </Text>
+
+                                <Text size="sm" color="dimmed" mt={5}>
+                                    Enable keyboard selection with <Kbd>ctrl</Kbd> + <Kbd>shift</Kbd> +<Kbd>k</Kbd>
+                                </Text>
+                            </>
+                        )}
                     </Stack>
                     {submitted && (
                         <Group position="apart" my={15} className="tour__titlegroup">

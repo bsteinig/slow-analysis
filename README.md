@@ -7,7 +7,7 @@
 
 ## About The Project
 
-[![Slow Analysis Screen Shot][product-screenshot]](https://web.eecs.umich.edu/~mjguz/slow-analysis/)
+[![Slow Analysis Screen Shot][project-screenshot]](https://web.eecs.umich.edu/~mjguz/slow-analysis/)
 
 This tool is used to generate a "slow reveal" carousel for the analysis of charts and graphs. 
 
@@ -84,3 +84,4 @@ Project Link - [https://github.com/bsteinig/slow-analysis](https://github.com/bs
 
 
 [project-screenshot]: images/screenshot.png
+

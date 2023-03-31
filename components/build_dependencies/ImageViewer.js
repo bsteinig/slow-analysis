@@ -95,6 +95,8 @@ function ImageViewer({
         setAspectRatio(e.target.naturalWidth / e.target.naturalHeight);
     };
 
+    // The fact that any of this even works is a miracle. I'm not sure why it works, but it does.
+
     // Lock,View, and Stats state
     const [locked, toggleLock] = useToggle();
     const [view, toggleView] = useToggle();

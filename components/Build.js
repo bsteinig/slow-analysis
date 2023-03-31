@@ -39,7 +39,7 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
     // Accessibility keyboard shortcut
     useHotkeys([['ctrl+shift+K', () => toggleKeyboard()]]);
 
-    // reactour state
+    //SECTION - reactour handlers
     useEffect(() => {
         if (firstVisit) {
             setSubmitted(true);
@@ -97,6 +97,7 @@ function Build({ setComponent, setProject, firstVisit, forceSelection }) {
             setSelection({ active: true, startX: 0.15, startY: 0.15, endX: 0.75, endY: 0.75 });
         }
     }, [forceSelection]);
+    //!SECTION - End of reactour handlers
 
     // Image state
     const [submitted, setSubmitted] = useSessionStorage({ key: 'image-submitted', defaultValue: false });

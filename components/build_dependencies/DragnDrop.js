@@ -1,7 +1,8 @@
 import { ActionIcon, Center, createStyles, Grid, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconGripHorizontal, IconTools, IconTrashX, IconX } from '@tabler/icons';
 import React from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'; // This project has been deprecated, but it's still the best option for drag and drop
+//NOTE - Ideally we would use a drag and drop libray that supports list wrapping to avoid long scrolling lists
 
 const useStyles = createStyles((theme) => ({
     card: {

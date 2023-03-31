@@ -45,6 +45,9 @@ const useStyles = createStyles((theme) => ({
 function Overview({ setComponent, lastStep, setFirstVisit, firstVisit, setOpen }) {
     const { classes } = useStyles();
 
+    // timeStamps are the time in seconds for each step of the video
+    //NOTE - The original intention was to use these to sync the Timeline with the video, 
+    // but this wasn't possible due to issues with Iframe and React
     const timeStamps = [0, 18, 36, 51, 61, 79];
 
     const handleTour = () => {

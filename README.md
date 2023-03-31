@@ -23,9 +23,9 @@ Use the following command to set your node version
 nvm use
 ```
 
-If you aren't using nvm, you should, or you can install Node.js 16.5.0 from https://nodejs.org/en/. Just make sure you uninstall any existing node installations first.
+If you aren't using nvm, you should, or you can install Node.js 18.12.1 from https://nodejs.org/en/. Just make sure you uninstall any existing node installations first.
 
-2. Install required packages
+1. Install required packages
 
 All you have to do is run this command inside the project directory
 
@@ -49,6 +49,8 @@ Then, open your localhost at port 3000
 
 http://localhost:3000/
 
+(Highly recommend the Comment Anchors extension for VSCode)
+
 ##  Building the service
 
 To build the service, run the following command:
@@ -67,9 +69,18 @@ To run the tests, run the following command:
 npm run cypress
 ```
 
+## Usage
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Contact
+
+Ben Steinig - bsteinig at umich dot edu
+
+Project Link - [https://github.com/bsteinig/slow-analysis](https://github.com/bsteinig/slow-analysis)
 
 
 [project-screenshot]: images/screenshot.png

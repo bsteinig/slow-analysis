@@ -64,6 +64,8 @@ function Preview({ setComponent, project }) {
     const [showSource, setShowSource] = useState(false);
     const [component, setIndex] = useState('');
 
+    // raw embed code, used for copy to clipboard
+    //NOTE - this should probably be loaded from a file or something less gross
     const index = `<html>
         <head>
           <meta charset="utf-8" />
@@ -153,6 +155,7 @@ function Preview({ setComponent, project }) {
         setIndex(html);
     };
 
+    // regenerate HTML when project changes
     useEffect(() => {
         if (project.slides?.length > 0) {
             generateHTML(project);
@@ -257,6 +260,9 @@ function Preview({ setComponent, project }) {
 }
 
 export default Preview;
+
+// If an offline version is every needed, uncomment this code
+// You would really just need to zip the index.html, index.js, style.css, and the images folder
 /*
                                 <Tooltip
                                     multiline
@@ -271,4 +277,4 @@ export default Preview;
                                         Copy HTML Canvas
                                     </Button>
                                 </Tooltip>
-                                */
+*/

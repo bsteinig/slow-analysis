@@ -8,6 +8,7 @@ const Tour = dynamic(() => import('reactour'), { ssr: false });
 function TourWrapper({ setComponent, setProject, setFirstVisit, isTourOpen, setOpen, setLastStep, lastStep }) {
     const theme = useMantineTheme();
 
+    // see handleCurr for explanation
     const [cur, setCurr] = useState(0);
     const [force, setForce] = useState(false);
 
@@ -18,6 +19,7 @@ function TourWrapper({ setComponent, setProject, setFirstVisit, isTourOpen, setO
         setLastStep(cur === tourConfig.length - 1 ? 0 : cur);
     };
 
+    // This is a hack to force the Build component to automatically create a selection during the tour
     const handleCurr = (curr) => {
         setCurr(curr);
         if (curr === 7) {
@@ -29,6 +31,7 @@ function TourWrapper({ setComponent, setProject, setFirstVisit, isTourOpen, setO
         }
     };  
 
+    // react tour config
     const tourConfig = [
         {
             selector: '.tour__welcome',

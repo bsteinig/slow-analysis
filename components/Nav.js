@@ -7,6 +7,7 @@ import {
     MediaQuery,
     Navbar,
     Text,
+    Tooltip,
     useMantineColorScheme,
     useMantineTheme,
 } from '@mantine/core';
@@ -100,9 +101,11 @@ function Nav({ setActive }) {
                     justifyContent: 'center',
                 }}
             >
+                <Tooltip label="About Us" events={{ hover: true, focus: true, touch: false }}>
                 <ActionIcon
                     onClick={() => setActive('about')}
                     size="lg"
+                    label="About Us"
                     radius="xl"
                     sx={(theme) => ({
                         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
@@ -111,6 +114,7 @@ function Nav({ setActive }) {
                 >
                     <IconInfoCircle size={24} />
                 </ActionIcon>
+                </Tooltip>
             </Center>
             <Group noWrap className={classes.linkGroup}>
                 {links}
@@ -124,17 +128,20 @@ function Nav({ setActive }) {
                     justifyContent: 'center',
                 }}
             >
-                <ActionIcon
-                    onClick={() => toggleColorScheme()}
-                    size="lg"
-                    radius="xl"
-                    sx={(theme) => ({
-                        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
-                        color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
-                    })}
-                >
-                    {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoonStars size={18} />}
-                </ActionIcon>
+                <Tooltip label="Toggle color scheme" events={{ hover: true, focus: true, touch: false }}>
+                    <ActionIcon
+                        onClick={() => toggleColorScheme()}
+                        label="Toggle color scheme"
+                        size="lg"
+                        radius="xl"
+                        sx={(theme) => ({
+                            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
+                            color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
+                        })}
+                    >
+                        {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+                    </ActionIcon>
+                </Tooltip>
             </Center>
         </Navbar>
     );

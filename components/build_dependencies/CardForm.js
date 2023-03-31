@@ -12,7 +12,7 @@ import {
     TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconAugmentedReality } from '@tabler/icons';
+import { IconAugmentedReality } from '@tabler/icons'; // A better icon might exist ??
 import React, { useEffect } from 'react';
 
 const useStyles = createStyles((theme) => ({
